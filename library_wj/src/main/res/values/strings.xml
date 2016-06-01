@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Library_wj</string>
+
+    <!--通用-->
+    <string name="common_conn_err">请检查网络</string>
+    <string name="common_confirm">确定</string>
+    <string name="common_cancel">取消</string>
+    <string name="common_storage_err">存储设备异常</string>
+
+
+    <!--头像操作-->
+    <string name="select_profile">选择头像</string>
+    <string name="drawer_can_not_save_protrait">头像本地保存失败，请检查SD卡</string>
+
+
+</resources>

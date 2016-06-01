@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--通用全局基本主题-->
+    <style name="MyBaseAppTheme" parent="Theme.AppCompat.Light">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <!--<item name="android:textCursorDrawable">@null</item>-->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
+
+    </style>
+
+
+
+    <!--activity动画切换-->
+    <!--
+    注意需要继承自 @android:style/Animation.Activity。假设有 2 个 Activity，分别是 A1 和 A2：
+    当从 A1 启动 A2 时，A1 从屏幕上消失，这个动画叫做 android:activityOpenExitAnimation
+    当从 A1 启动 A2 时，A2 出现在屏幕上，这个动画叫做 android:activityOpenEnterAnimation
+    当从 A2 退出回到 A1 时，A2 从屏幕上消失，这个叫做 android:activityCloseExitAnimation
+    当从 A2 退出回到 A1 时，A1 出现在屏幕上，这个叫做 android:activityCloseEnterAnimation
+    -->
+    <style name="AnimationActivity" parent="@android:style/Animation.Activity" mce_bogus="1">
+        <item name="android:activityOpenEnterAnimation">@anim/screenright_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/screenleft_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/screenleft_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/screenright_exit</item>
+    </style>
+
+</resources>

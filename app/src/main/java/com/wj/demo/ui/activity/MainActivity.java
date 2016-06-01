@@ -63,9 +63,22 @@ public class MainActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         items = new ArrayList<>();
+
         Item item1 = new Item();
         item1.setName("1.JSON解析");
         items.add(item1);
+
+        Item item2 = new Item();
+        item2.setName("2.Socket相关");
+        items.add(item2);
+
+        Item item3 = new Item();
+        item3.setName("3.图片处理");
+        items.add(item3);
+
+        Item item4 = new Item();
+        item4.setName("4.暂未开放");
+        items.add(item4);
 
     }
 

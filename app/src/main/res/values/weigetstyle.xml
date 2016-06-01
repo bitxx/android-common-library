@@ -8,4 +8,49 @@
         <item name="android:fitsSystemWindows">true</item>
         <!--  <item name="android:clipToPadding">true</item>-->
     </style>
+
+    <!--textview 公共布局-->
+    <style name="tv_common">
+        <item name="android:drawablePadding">10dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+    </style>
+
+    <!--公共的item的风格-->
+    <style name="ll_common_item">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@drawable/item_select</item>
+
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:layout_marginBottom">1dp</item>
+    </style>
+
+    <!--右侧详情箭头-->
+    <style name="tv_detail">
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">right|center_vertical</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:textColorHint">@color/lightgray</item>
+        <item name="android:drawableRight">@mipmap/contents_arrow</item>
+    </style>
+
+    <!-- 分割线 -->
+    <style name="line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1px</item>
+        <item name="android:background">@color/line</item>
+    </style>
+
+
 </resources>

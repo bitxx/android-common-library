@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="main_color_day">#ffffff</color> <!--全局白天背景-->
+    <color name="line">#d7d7d7</color> <!--分割线-->
 </resources>

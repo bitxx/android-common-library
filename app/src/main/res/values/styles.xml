@@ -19,8 +19,15 @@
 
     <!--新定义主题-->
     <style name="MyTheme" parent="MyBaseAppTheme">
-        <!-- Customize your theme here. -->
 
+        <!-- Customize your theme here. -->
+    </style>
+
+    <!--刚启动的activity可能会有黑屏或白屏，该主题可以避免-->
+    <style name="first_activity_start" parent="start_transparent">
+        <item name="android:windowFullscreen">true</item>
+        <!-- Customize your theme here. 可以在此重写下述配置，使得启动页颜色一致 -->
+        <!--<item name="android:windowBackground">@color/white</item> -->
     </style>
 
 </resources>

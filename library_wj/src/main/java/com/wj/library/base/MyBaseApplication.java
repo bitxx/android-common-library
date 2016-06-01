@@ -7,26 +7,26 @@ import android.app.Application;
  * @author idea_wj 2016-06-01
  * @version 1.0
  */
-public class BaseApplication extends Application {
-    private static final String TAG = BaseApplication.class.getName();
+public class MyBaseApplication extends Application {
+    private static final String TAG = MyBaseApplication.class.getName();
 
-    private static BaseApplication baseApplication;
+    private static MyBaseApplication myBaseApplication;
 
     /**
      * 多线程，双重锁定
      * @return
      */
-    public static BaseApplication getInstance(){
+    public static MyBaseApplication getInstance(){
 
-        if(baseApplication==null){
-            synchronized (BaseApplication.class){
-                if(baseApplication==null){   //涉及到异步问题
-                    baseApplication = new BaseApplication();
+        if(myBaseApplication ==null){
+            synchronized (MyBaseApplication.class){
+                if(myBaseApplication ==null){   //涉及到异步问题
+                    myBaseApplication = new MyBaseApplication();
                 }
             }
         }
 
-        return baseApplication;
+        return myBaseApplication;
     }
 
     /**

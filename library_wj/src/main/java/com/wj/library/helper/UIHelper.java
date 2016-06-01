@@ -3,8 +3,9 @@ package com.wj.library.helper;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 
-import com.wj.library.base.BaseAppManager;
+import com.wj.library.base.MyBaseAppManager;
 
 
 /**
@@ -15,16 +16,16 @@ import com.wj.library.base.BaseAppManager;
 public class UIHelper {
 
     public static void activityFinish() {
-        BaseAppManager.getInstance().finishActivity();
+        MyBaseAppManager.getInstance().finishActivity();
     }
 
     /**
      * Activity页面之间的简单跳转,跳转后，前一个activity不被finish
      *
      */
-    public static void startActivityNoFinishin(Activity activity, Intent intent) {
+    public static void startActivityNoFinishin(AppCompatActivity activity, Intent intent) {
         activity.startActivity(intent);
-        BaseAppManager.getInstance().addActivity(activity);
+        MyBaseAppManager.getInstance().addActivity(activity);
     }
 
 
@@ -33,28 +34,29 @@ public class UIHelper {
      * 不适用于activity
      *
      */
-    public static void startActivityForResult(Activity activity,Intent intent, int RequestCode) {
+    public static void startActivityForResult(AppCompatActivity activity,Intent intent, int RequestCode) {
         activity.startActivityForResult(intent, RequestCode);
-        BaseAppManager.getInstance().addActivity(activity);
+        MyBaseAppManager.getInstance().addActivity(activity);
     }
 
     /**
      * 从fragment切换到下一个Activity页面之间跳转并返回结果
      *
      */
-    public static void startFragmentActivityForResult(Fragment fragment,Activity activity,Intent intent, int RequestCode) {
+    public static void startFragmentActivityForResult(Fragment fragment,AppCompatActivity activity,Intent intent, int RequestCode) {
         fragment.startActivityForResult(intent, RequestCode);
-        BaseAppManager.getInstance().addActivity(activity);
+        MyBaseAppManager.getInstance().addActivity(activity);
     }
 
     /**
      * Activity页面之间的简单跳转,跳转后，前一个activity被finish
      *
      */
-    public static void startActivityAndFinishin(Activity activity, Intent intent) {
+    public static void startActivityAndFinishin(AppCompatActivity activity, Intent intent) {
         activity.startActivity(intent);
-        BaseAppManager.getInstance().finishActivity();  //栈顶先除去
-        BaseAppManager.getInstance().addActivity(activity);  //再新增
+        MyBaseAppManager.getInstance().addActivity(activity);  //再新增
+        MyBaseAppManager.getInstance().finishActivity(activity);  //栈顶先除去
+
 
     }
 }

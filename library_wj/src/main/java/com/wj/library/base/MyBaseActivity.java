@@ -3,6 +3,7 @@ package com.wj.library.base;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -16,7 +17,7 @@ import com.wj.library.R;
  * 所有activity的基类
  * @version 1.0
  */
-public abstract class MyBaseActivity extends Activity implements View.OnClickListener {
+public abstract class MyBaseActivity extends AppCompatActivity implements View.OnClickListener {
     public static final int MIN_CLICK_DELAY_TIME = 1000;
     private long lastClickTime = 0;
     private InputMethodManager imm; //输入法控制

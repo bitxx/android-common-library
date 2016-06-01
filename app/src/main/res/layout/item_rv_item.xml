@@ -5,10 +5,11 @@
     android:id="@+id/rl_item"
     style="@style/ll_common_item"
     android:layout_height="wrap_content"
-    android:paddingLeft="0dp">
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    >
 
     <TextView
-        android:text="阿发"
         android:id="@+id/tv_name"
         style="@style/tv_common"
         android:layout_height="wrap_content"
@@ -22,6 +23,8 @@
         style="@style/tv_detail" />
     <View
         android:layout_alignBottom="@+id/tv_name"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         style="@style/line"
         />
 </RelativeLayout>

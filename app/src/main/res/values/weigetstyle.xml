@@ -12,8 +12,8 @@
     <!--textview 公共布局-->
     <style name="tv_common">
         <item name="android:drawablePadding">10dp</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">15dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">18dp</item>
@@ -29,8 +29,6 @@
         <item name="android:orientation">horizontal</item>
         <item name="android:background">@drawable/item_select</item>
 
-        <item name="android:paddingLeft">15dp</item>
-        <item name="android:layout_marginBottom">1dp</item>
     </style>
 
     <!--右侧详情箭头-->

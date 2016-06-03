@@ -2,6 +2,7 @@ package com.wj.demo.ui.activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -202,10 +203,6 @@ public class JsonActivity extends BaseActivity {
      * 解析json
      */
     private void parser(){
-        if(StringUtil.isEmail(result.toString())){
-            ToastHelper.toastShort(this,"请先生成json");
-            return;
-        }
         try {
             JSONTokener parser = new JSONTokener(result.toString());
             JSONObject res = (JSONObject) parser.nextValue();  //也就是开始第一个大括号
@@ -264,7 +261,7 @@ public class JsonActivity extends BaseActivity {
                 }
             }).show();
         } catch (JSONException e) {
-            e.printStackTrace();
+            ToastHelper.toastShort(this,"请先生成json");
         }
     }
 }

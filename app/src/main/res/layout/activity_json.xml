@@ -3,7 +3,7 @@
     style="@style/total_layout"
     android:orientation="vertical">
 
-    <ScrollView
+    <com.wj.library.widget.CustomerScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -50,5 +50,5 @@
                 android:padding="10dp" />
 
         </LinearLayout>
-    </ScrollView>
+    </com.wj.library.widget.CustomerScrollView>
 </LinearLayout>

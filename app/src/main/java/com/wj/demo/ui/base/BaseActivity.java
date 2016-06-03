@@ -21,7 +21,7 @@ import com.wj.library.helper.UIHelper;
  * 注意:
  * @author idea_wj 2015-11-05
  */
-public  class BaseActivity extends MyBaseActivity {
+public class BaseActivity extends MyBaseActivity {
     private static final String TAG = BaseActivity.class.getName();
 
     @Override
@@ -60,20 +60,17 @@ public  class BaseActivity extends MyBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        //强制竖屏
         if(getRequestedOrientation()!=ActivityInfo.SCREEN_ORIENTATION_PORTRAIT){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_BACK) {
-            UIHelper.activityFinish();
+            UIHelper.activityFinish(this);
             return true;
         }
         return super.onKeyDown(keyCode, event);

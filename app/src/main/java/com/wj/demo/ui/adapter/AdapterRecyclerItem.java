@@ -1,6 +1,7 @@
 package com.wj.demo.ui.adapter;
 
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +19,11 @@ import java.util.ArrayList;
  */
 public class AdapterRecyclerItem extends RecyclerView.Adapter<ViewHolderItem> {
 
-    private Context context;
+    private AppCompatActivity activity;
     private ArrayList<Item> items;
 
-    public AdapterRecyclerItem(Context context, ArrayList<Item> items){
-        this.context = context;
+    public AdapterRecyclerItem(AppCompatActivity activity, ArrayList<Item> items){
+        this.activity = activity;
         this.items = items;
     }
 
@@ -30,7 +31,7 @@ public class AdapterRecyclerItem extends RecyclerView.Adapter<ViewHolderItem> {
     @Override
     public ViewHolderItem onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_rv_item, parent, false);
-        return new ViewHolderItem(v, context);
+        return new ViewHolderItem(v, activity);
     }
 
     @Override

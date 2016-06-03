@@ -1,5 +1,7 @@
 package com.wj.demo.domain;
 
+import android.support.v7.app.AppCompatActivity;
+
 import com.wj.library.domain.Entity;
 
 /**
@@ -7,7 +9,15 @@ import com.wj.library.domain.Entity;
  */
 public class Item extends Entity {
     private String name;
+    private Class activity;
 
+    public Class getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Class activity) {
+        this.activity = activity;
+    }
 
     public String getName() {
         return name;

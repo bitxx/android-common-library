@@ -15,8 +15,8 @@ import com.wj.library.base.MyBaseAppManager;
  */
 public class UIHelper {
 
-    public static void activityFinish() {
-        MyBaseAppManager.getInstance().finishActivity();
+    public static void activityFinish(AppCompatActivity activity) {
+        MyBaseAppManager.getInstance().finishActivity(activity);
     }
 
     /**

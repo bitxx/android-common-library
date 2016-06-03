@@ -65,7 +65,8 @@ public class MainActivity extends BaseActivity {
         items = new ArrayList<>();
 
         Item item1 = new Item();
-        item1.setName("1.JSON解析");
+        item1.setName("1.JSON生成与解析");
+        item1.setActivity(JsonActivity.class);
         items.add(item1);
 
         Item item2 = new Item();

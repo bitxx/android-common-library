@@ -178,7 +178,7 @@ public class JsonActivity extends BaseActivity {
             vechicleType_3_1.put("vechicleTypeName","父类车型2下的第一个子类车型");
             vechicleType_3_1.put("initiatePrice",180.5);
             vechicleType_3_1.put("newEnergy",0);
-            vechicleModelList_3.put(vechicleType_2_1);
+            vechicleModelList_3.put(vechicleType_3_1);
             vechicleModel_3.put("vechicleTypelist",vechicleModelList_3);
             vechicleModelList.put(vechicleModel_3);
             result.put("data",vechicleModelList);

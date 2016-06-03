@@ -66,7 +66,7 @@ public class MainActivity extends BaseActivity {
 
         Item item1 = new Item();
         item1.setName("1.JSON生成与解析");
-        item1.setActivity(JsonActivity.class);
+        item1.setActivity(JsonDemoActivity.class);
         items.add(item1);
 
         Item item2 = new Item();
@@ -78,8 +78,13 @@ public class MainActivity extends BaseActivity {
         items.add(item3);
 
         Item item4 = new Item();
-        item4.setName("4.暂未开放");
+        item4.setName("4.有弹性的ScrollView");
+        item4.setActivity(ElasticScorllViewDemoActivity.class);
         items.add(item4);
+
+        Item item5 = new Item();
+        item5.setName("5.暂未开放");
+        items.add(item5);
 
     }
 

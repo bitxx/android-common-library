@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/total_layout"
+    android:orientation="vertical">
+
+    <com.wj.library.widget.CustomerScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="请下拉我吧~~~"
+            android:textColor="@color/main"
+            android:textSize="30sp" />
+    </com.wj.library.widget.CustomerScrollView>
+</LinearLayout>

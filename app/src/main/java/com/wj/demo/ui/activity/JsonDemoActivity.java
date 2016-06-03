@@ -2,7 +2,6 @@ package com.wj.demo.ui.activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,7 +10,7 @@ import com.wj.demo.R;
 import com.wj.demo.ui.base.BaseActivity;
 import com.wj.library.helper.DialogHelper;
 import com.wj.library.helper.ToastHelper;
-import com.wj.library.util.StringUtil;
+import com.wj.library.helper.UIHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,11 +19,12 @@ import org.json.JSONTokener;
 
 /**
  * json解析demo
+ * 该demo仅仅是用来展示java原生提供的几个json类的使用方法，并没有单独封装
  * Created by wuj on 2016/6/3.
  * @version 1.0
  */
-public class JsonActivity extends BaseActivity {
-    private static String TAG = JsonActivity.class.getSimpleName();
+public class JsonDemoActivity extends BaseActivity {
+    private static String TAG = JsonDemoActivity.class.getSimpleName();
 
     private TextView tvJson;
     private Button btCreate;  //生成
@@ -47,6 +47,12 @@ public class JsonActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        ToastHelper.toastShort(this,"该demo仅仅是用来展示java原生提供的几个json类的使用方法，并没有单独封装");
+    }
+
+    @Override
     protected void initView() {
         super.initView();
         tvJson = (TextView) findViewById(R.id.tv_json);
@@ -55,6 +61,7 @@ public class JsonActivity extends BaseActivity {
 
         btCreate.setOnClickListener(this);
         btResolve.setOnClickListener(this);
+
         String json = "{\n" +
                 "    \"successful\": true,\n" +
                 "    \"statusCode\": \"1\",\n" +

@@ -22,7 +22,8 @@
         </activity>
 
         <activity android:name=".ui.activity.MainActivity" />
-        <activity android:name=".ui.activity.JsonActivity" />
+        <activity android:name=".ui.activity.JsonDemoActivity" />
+        <activity android:name=".ui.activity.ElasticScorllViewDemoActivity" />
     </application>
 
 </manifest>

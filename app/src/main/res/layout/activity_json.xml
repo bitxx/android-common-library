@@ -12,18 +12,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="JSON示例串:" />
-
-            <TextView
-                android:id="@+id/tv_json"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp" />
-
             <Button
                 android:id="@+id/bt_create"
                 android:layout_width="match_parent"
@@ -40,15 +28,27 @@
                 android:id="@+id/bt_resolve"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
+                android:layout_marginBottom="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/bt_select_1"
                 android:text="解析JSON"
                 android:textColor="@color/white"
-                android:textSize="20sp"
-                android:layout_marginBottom="20dp"
-                />
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="JSON示例串:" />
+
+            <TextView
+                android:id="@+id/tv_json"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -11,10 +11,13 @@ import android.widget.TextView;
 import com.wj.demo.R;
 import com.wj.demo.ui.base.BaseActivity;
 import com.wj.library.helper.DialogHelper;
+import com.wj.library.helper.ToastHelper;
+import com.wj.library.util.StringUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 /**
  * json解析demo
@@ -28,6 +31,8 @@ public class JsonActivity extends BaseActivity {
     private Button btCreate;  //生成
     private Button btResolve;  //解析
 
+    private JSONObject result;  //整个json解析和生成都将依托它
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +41,11 @@ public class JsonActivity extends BaseActivity {
         initView();
     }
 
+    @Override
+    protected void initData() {
+        super.initData();
+        result = new JSONObject();
+    }
 
     @Override
     protected void initView() {
@@ -106,7 +116,7 @@ public class JsonActivity extends BaseActivity {
                 create();
                 break;
             case R.id.bt_resolve:
-                resolve();
+                parser();
                 break;
         }
     }
@@ -115,7 +125,7 @@ public class JsonActivity extends BaseActivity {
      * 生成json
      */
     private void create(){
-        JSONObject result = new JSONObject();
+
         JSONArray vechicleModelList = new JSONArray();  //存放多个父类车型
 
         //第一个父类车型，包括其子类车型
@@ -193,7 +203,70 @@ public class JsonActivity extends BaseActivity {
     /**
      * 解析json
      */
-    private void resolve(){
+    private void parser(){
+        if(StringUtil.isEmail(result.toString())){
+            ToastHelper.toastShort(this,"请先生成json");
+            return;
+        }
+        try {
+            JSONTokener parser = new JSONTokener(result.toString());
+            JSONObject res = (JSONObject) parser.nextValue();  //也就是开始第一个大括号
+            String all = "\n\nsuccessful："+res.getBoolean("successful")
+                    + "\nstatusCode:"+res.getInt("statusCode")
+                    + "\nstatusInfo:"+res.getString("statusInfo");
+            JSONArray vechicleModelList = res.getJSONArray("data");
 
+            //解析第一类父车型（包括子类车型）
+            JSONObject vechicleModel_1 = vechicleModelList.getJSONObject(0);
+            JSONObject vechicleType_1_1 = new JSONObject(); //子类车型
+            JSONArray vechicleModelList_1 = new JSONArray(); //存放子类车型的array
+            all  += "\n\nvehicleModelId:" +vechicleModel_1.getInt("vehicleModelId")
+                    + "\nvehicleModelinitiatePrice:"+vechicleModel_1.getDouble("vehicleModelinitiatePrice")
+                    + "\nvehicleModelName:"+vechicleModel_1.getString("vehicleModelName");
+            vechicleModelList_1 = vechicleModel_1.getJSONArray("vechicleTypelist");
+            vechicleType_1_1 = vechicleModelList_1.getJSONObject(0);
+            all += "\nvechicleTypeId:"+vechicleType_1_1.getInt("vechicleTypeId")
+                    + "\nvechicleTypeName:"+vechicleType_1_1.getString("vechicleTypeName")
+                    + "\ninitiatePrice:"+vechicleType_1_1.getDouble("initiatePrice")
+                    + "\nnewEnergy:"+vechicleType_1_1.getInt("newEnergy");
+
+
+            //解析第二类父车型（包括子类车型）
+            JSONObject vechicleModel_2 = vechicleModelList.getJSONObject(1); //注意此处变化，index变为1
+            JSONObject vechicleType_2_1 = new JSONObject(); //子类车型
+            JSONArray vechicleModelList_2 = new JSONArray(); //存放子类车型的array
+            all  += "\n\nvehicleModelId:" +vechicleModel_2.getInt("vehicleModelId")
+                    + "\nvehicleModelinitiatePrice:"+vechicleModel_2.getDouble("vehicleModelinitiatePrice")
+                    + "\nvehicleModelName:"+vechicleModel_2.getString("vehicleModelName");
+            vechicleModelList_2 = vechicleModel_2.getJSONArray("vechicleTypelist");
+            vechicleType_2_1 = vechicleModelList_2.getJSONObject(0);
+            all += "\nvechicleTypeId:"+vechicleType_2_1.getInt("vechicleTypeId")
+                    + "\nvechicleTypeName:"+vechicleType_2_1.getString("vechicleTypeName")
+                    + "\ninitiatePrice:"+vechicleType_2_1.getDouble("initiatePrice")
+                    + "\nnewEnergy:"+vechicleType_2_1.getInt("newEnergy");
+
+            //解析第三类父车型（包括子类车型）
+            JSONObject vechicleModel_3 = vechicleModelList.getJSONObject(2); //注意此处变化，index变为2
+            JSONObject vechicleType_3_1 = new JSONObject(); //子类车型
+            JSONArray vechicleModelList_3 = new JSONArray(); //存放子类车型的array
+            all  += "\n\nvehicleModelId:" +vechicleModel_3.getInt("vehicleModelId")
+                    + "\nvehicleModelinitiatePrice:"+vechicleModel_3.getDouble("vehicleModelinitiatePrice")
+                    + "\nvehicleModelName:"+vechicleModel_3.getString("vehicleModelName");
+            vechicleModelList_3 = vechicleModel_3.getJSONArray("vechicleTypelist");
+            vechicleType_3_1 = vechicleModelList_3.getJSONObject(0);
+            all += "\nvechicleTypeId:"+vechicleType_3_1.getInt("vechicleTypeId")
+                    + "\nvechicleTypeName:"+vechicleType_3_1.getString("vechicleTypeName")
+                    + "\ninitiatePrice:"+vechicleType_3_1.getDouble("initiatePrice")
+                    + "\nnewEnergy:"+vechicleType_3_1.getInt("newEnergy");
+
+            DialogHelper.getMessageDialog(this, "json解析成功：\n" + all, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            }).show();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

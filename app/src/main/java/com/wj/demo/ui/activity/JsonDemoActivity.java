@@ -49,7 +49,13 @@ public class JsonDemoActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        ToastHelper.toastShort(this,"该demo仅仅是用来展示java原生提供的几个json类的使用方法，并没有单独封装");
+        DialogHelper.getMessageDialog(this, "当前页面demo仅仅是用来展示java原生提供的几个json类的使用方法，并没有单独封装", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        }).show();
+
     }
 
     @Override

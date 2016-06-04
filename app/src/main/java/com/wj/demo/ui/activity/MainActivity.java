@@ -83,8 +83,12 @@ public class MainActivity extends BaseActivity {
         items.add(item4);
 
         Item item5 = new Item();
-        item5.setName("5.暂未开放");
+        item5.setName("5.页面手势滑动");
         items.add(item5);
+
+        Item item6 = new Item();
+        item6.setName("6.暂未开放");
+        items.add(item6);
 
     }
 

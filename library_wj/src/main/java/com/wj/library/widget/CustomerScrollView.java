@@ -30,7 +30,6 @@ public class CustomerScrollView extends ScrollView {
 	public CustomerScrollView(Context context) {
 		super(context);
 	}
-
 	public CustomerScrollView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}

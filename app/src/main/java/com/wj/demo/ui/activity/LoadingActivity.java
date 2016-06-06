@@ -32,7 +32,7 @@ public class LoadingActivity extends BaseActivity {
     protected void initView() {
         setContentView(R.layout.activity_loading);
 
-        //暂时休眠1800过渡
+        //暂时休眠1800过渡，后面再处理
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -46,6 +46,5 @@ public class LoadingActivity extends BaseActivity {
                 }
             }
         }).start();
-
     }
 }

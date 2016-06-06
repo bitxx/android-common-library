@@ -23,6 +23,7 @@ import org.json.JSONTokener;
 /**
  * json解析demo
  * 该demo仅仅是用来展示java原生提供的几个json类的使用方法，并没有单独封装
+ * 代码量感觉很大，核心其实没多少
  * Created by wuj on 2016/6/3.
  * @version 1.0
  */
@@ -287,20 +288,4 @@ public class JsonDemoActivity extends BaseActivity {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        switch (id){
-            case android.R.id.home:
-                UIHelper.activityFinish(this);
-                break;
-        }
-
-
-        return super.onOptionsItemSelected(item);
-    }
 }

@@ -3,6 +3,7 @@ package com.wj.demo.ui.base;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.wj.demo.app.AppContext;
@@ -74,5 +75,22 @@ public class BaseActivity extends MyBaseActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        switch (id){
+            case android.R.id.home:
+                UIHelper.activityFinish(this);
+                break;
+        }
+
+
+        return super.onOptionsItemSelected(item);
     }
 }

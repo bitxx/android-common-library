@@ -1,6 +1,5 @@
 package com.wj.demo.ui.adapter;
 
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.wj.demo.R;
 import com.wj.demo.domain.Item;
+import com.wj.library.helper.ToastHelper;
 import com.wj.library.helper.UIHelper;
 import com.wj.library.listener.MyOnClickListener;
 
@@ -48,6 +49,10 @@ public class ViewHolderItem extends RecyclerView.ViewHolder {
 
             @Override
             public void myOnClick(View view) {
+                if(item.getActivity()==null){
+                    ToastHelper.toastShort(activity,"暂未实现");
+                    return;
+                }
                 UIHelper.startActivityNoFinishin(activity,new Intent(activity,item.getActivity()));
             }
         });

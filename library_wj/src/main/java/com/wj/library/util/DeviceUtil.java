@@ -21,7 +21,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 
-import com.wj.library.widget.SystemBarTintManager;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -80,31 +79,6 @@ public class DeviceUtil {
         return 0;
     }
 
-    /**
-     * 将状态栏颜色设置为指定的透明色
-     * @param activity
-     */
-    public static void setStatusBarTransitation(Activity activity,int color){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-
-            setTranslucentStatus(activity,true);
-            SystemBarTintManager tintManager = new SystemBarTintManager(activity);
-            tintManager.setStatusBarTintEnabled(true);
-            tintManager.setStatusBarTintResource(color);//通知栏所需颜色
-
-
-            Window window = activity.getWindow();
-            // 状态栏半透明，半透明后，顶部自定义的titlebar需要重新休整，保证显示正常
-            window.setFlags(
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            // 此处为设置下方虚拟键为半透明，但经过测试，在很多手机（华为很多虚拟键手机），若为半透明，体验很差，故暂时注释
-            /*window.setFlags(
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);*/
-        }
-    }
-
     @TargetApi(19)
     private static void setTranslucentStatus(Activity activity,boolean on) {
         Window win = activity.getWindow();
@@ -134,7 +108,7 @@ public class DeviceUtil {
     public static void getScreenSize(Context context) {
         if (SCREEN_HEIGHT == 0 || SCREEN_WIDTH == 0) {
             SCREEN_HEIGHT = context.getResources().getDisplayMetrics().heightPixels; // 屏幕高度
-            SCREEN_WIDTH = context.getResources().getDisplayMetrics().widthPixels;; // 屏幕宽度
+            SCREEN_WIDTH = context.getResources().getDisplayMetrics().widthPixels;// 屏幕宽度
         }
     }
 
@@ -145,11 +119,7 @@ public class DeviceUtil {
      */
     public static boolean hasSdcard() {
         String state = Environment.getExternalStorageState();
-        if (state.equals(Environment.MEDIA_MOUNTED)) {
-            return true;
-        } else {
-            return false;
-        }
+        return state.equals(Environment.MEDIA_MOUNTED);
     }
 
     /**

@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/total_layout"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/toolbar_common_1" />
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_profile"
+        style="@style/ll_common_item"
+        android:paddingBottom="5dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:paddingTop="5dp">
+
+        <TextView
+            style="@style/tv_common"
+            android:layout_centerVertical="true"
+            android:text="点击此处替换头像" />
+
+        <ImageView
+            android:id="@+id/iv_portrait"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:src="@mipmap/ic_launcher" />
+
+    </RelativeLayout>
+
+    <View style="@style/line" />
+
+</LinearLayout>

@@ -29,6 +29,7 @@ public class FileUtil {
      * @param path
      */
     public static boolean createCachePath(String path, Context context){
+
         String savePath = "";
         String storageState = Environment.getExternalStorageState();
         if (storageState.equals(Environment.MEDIA_MOUNTED)) {
@@ -148,10 +149,7 @@ public class FileUtil {
             return false;
         File file = null;
         file = new File(filePath);
-        if (!file.exists()) {
-            return false;
-        }
-        return true;
+        return file.exists();
     }
 
     /**

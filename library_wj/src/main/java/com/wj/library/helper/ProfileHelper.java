@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.wj.library.R;
@@ -23,9 +25,9 @@ import java.io.File;
  * @version 1.0
  */
 public class ProfileHelper {
-    private static final String TAG = ProfileHelper.class.getName();
+    private static final String TAG = ProfileHelper.class.getSimpleName();
 
-    private Activity activity;
+    private AppCompatActivity activity;
 
     private Uri cropUri;
     private Uri origUri;  //头像照片，拍完后尚未处理的路径
@@ -37,7 +39,7 @@ public class ProfileHelper {
     public static final int ACTION_TYPE_PHOTO = 1;  // 相机
     public static final int ACTION_GETIMAGE_BYSDCARD = 2;  //照相和相册结果都是从sd中获取
 
-    public ProfileHelper(Activity activity){
+    public ProfileHelper(AppCompatActivity activity){
         this.activity = activity;
     }
 
@@ -119,7 +121,7 @@ public class ProfileHelper {
      * @param intent
      * @param callbackProfileListener 回调显示
      */
-    public void resultSet(int requestCode, Intent intent, ImageView imageView, CallbackProfileListener callbackProfileListener){
+    public void resultSet(int requestCode, Intent intent, CallbackProfileListener callbackProfileListener){
         if(requestCode==ACTION_TYPE_PHOTO) { //拍照
             startActionCrop(origUri);
         }if(requestCode== ACTION_TYPE_ALBUM){ //相册获取

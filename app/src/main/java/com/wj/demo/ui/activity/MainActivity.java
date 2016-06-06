@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class MainActivity extends BaseActivity {
     private static String TAG = MainActivity.class.getName();
 
-    private RecyclerView rvItem;
+    private RecyclerView rvItem;  //使用了recyclerView
     private Toolbar toolbar;
     private AdapterRecyclerItem adapterRecyclerItem;
     private ArrayList<Item> items;
@@ -79,7 +79,7 @@ public class MainActivity extends BaseActivity {
 
         Item item1 = new Item();
         item1.setName("1.JSON生成与解析");
-        item1.setActivity(JsonDemoActivity.class);
+        item1.setActivity(DemoJsonActivity.class);
         items.add(item1);
 
         Item item2 = new Item();
@@ -87,12 +87,13 @@ public class MainActivity extends BaseActivity {
         items.add(item2);
 
         Item item3 = new Item();
-        item3.setName("3.图片处理");
+        item3.setName("3.头像切换");
+        item3.setActivity(DemoChangeProtraitActivity.class);
         items.add(item3);
 
         Item item4 = new Item();
         item4.setName("4.有弹性的ScrollView");
-        item4.setActivity(ElasticScorllViewDemoActivity.class);
+        item4.setActivity(DemoElasticScorllViewActivity.class);
         items.add(item4);
 
         Item item5 = new Item();

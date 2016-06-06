@@ -1,9 +1,7 @@
 package com.wj.demo.ui.activity;
 
 import android.content.DialogInterface;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,7 +11,6 @@ import com.wj.demo.ui.base.BaseActivity;
 import com.wj.library.helper.DialogHelper;
 import com.wj.library.helper.ToastHelper;
 import com.wj.library.helper.ToolbarHelper;
-import com.wj.library.helper.UIHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,8 +25,8 @@ import org.json.JSONTokener;
  * Created by wuj on 2016/6/3.
  * @version 1.0
  */
-public class JsonDemoActivity extends BaseActivity {
-    private static String TAG = JsonDemoActivity.class.getSimpleName();
+public class DemoJsonActivity extends BaseActivity {
+    private static String TAG = DemoJsonActivity.class.getSimpleName();
 
     private TextView tvJson;
     private Button btCreate;  //生成
@@ -47,7 +44,7 @@ public class JsonDemoActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        setContentView(R.layout.activity_json);
+        setContentView(R.layout.activity_demo_json);
         tvJson = (TextView) findViewById(R.id.tv_json);
         btCreate = (Button) findViewById(R.id.bt_create);
         btResolve = (Button) findViewById(R.id.bt_resolve);

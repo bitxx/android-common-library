@@ -1,7 +1,6 @@
 package com.wj.library.helper;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -11,6 +10,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 
@@ -106,7 +106,7 @@ public class CommonHelper {
      * @date 2014-10-12
      */
     @TargetApi(19)
-    public static String getImageAbsolutePath(Activity context, Uri imageUri) {
+    public static String getImageAbsolutePath(AppCompatActivity context, Uri imageUri) {
         if (context == null || imageUri == null)
             return null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context, imageUri)) {

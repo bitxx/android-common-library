@@ -12,20 +12,14 @@ public class MyBaseApplication extends Application {
 
     private static MyBaseApplication myBaseApplication;
 
-    /**
-     * 多线程，双重锁定
-     * @return
-     */
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        myBaseApplication = this;
+    }
+
     public static MyBaseApplication getInstance(){
-
-        if(myBaseApplication ==null){
-            synchronized (MyBaseApplication.class){
-                if(myBaseApplication ==null){   //涉及到异步问题
-                    myBaseApplication = new MyBaseApplication();
-                }
-            }
-        }
-
         return myBaseApplication;
     }
 

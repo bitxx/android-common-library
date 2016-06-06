@@ -1,7 +1,6 @@
 package com.wj.demo.ui.activity;
 
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,16 +28,8 @@ public class MainActivity extends BaseActivity {
     private ArrayList<Item> items;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initData();
-        initView();
-    }
-
-    @Override
     protected void initView() {
-        super.initView();
+        setContentView(R.layout.activity_main);
         rvItem = (RecyclerView)findViewById(R.id.rv_item);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -48,10 +39,8 @@ public class MainActivity extends BaseActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvItem.setLayoutManager(linearLayoutManager);
         rvItem.setAdapter(adapterRecyclerItem);
-
-        ToolbarHelper.initToolbar(this,toolbar,R.string.app_name,R.mipmap.ic_drawer_home,Color.WHITE);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,6 +49,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+        ToolbarHelper.initToolbar(this,toolbar,R.string.app_name,R.mipmap.ic_drawer_home,Color.WHITE);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

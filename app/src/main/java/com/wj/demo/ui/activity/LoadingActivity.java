@@ -1,8 +1,8 @@
 package com.wj.demo.ui.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
+import android.os.Handler;
+import android.os.Message;
 
 import com.wj.demo.R;
 import com.wj.demo.ui.base.BaseActivity;
@@ -17,24 +17,38 @@ import com.wj.library.helper.UIHelper;
 public class LoadingActivity extends BaseActivity {
     private static String TAG = LoadingActivity.class.getName();
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 1:
+                    UIHelper.startActivityAndFinishin(LoadingActivity.this, new Intent(LoadingActivity.this, MainActivity.class));
+                    break;
+            }
+        }
+    };
 
-    }
 
     @Override
     protected void initView() {
-        super.initView();
-        final View view = View.inflate(this, R.layout.activity_loading, null);
-        setContentView(view);
+        setContentView(R.layout.activity_loading);
 
-        UIHelper.startActivityAndFinishin(LoadingActivity.this, new Intent(LoadingActivity.this, MainActivity.class));
+        //暂时休眠1800过渡
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1800);
+                    Message msg = new Message();
+                    msg.what = 1;
+                    handler.sendMessage(msg);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
     }
 
-    @Override
-    protected void initData() {
-        super.initData();
-        
-    }
 }

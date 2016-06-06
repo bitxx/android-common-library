@@ -1,15 +1,12 @@
 package com.wj.demo.ui.activity;
 
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.wj.demo.R;
 import com.wj.demo.ui.base.BaseActivity;
 import com.wj.library.helper.ToolbarHelper;
-import com.wj.library.helper.UIHelper;
 
 /**
  * 有弹性的ScrollView
@@ -22,23 +19,9 @@ public class ElasticScorllViewDemoActivity extends BaseActivity {
     private Toolbar toolbar;
     private TextView tvTitle;
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_elastic_srocllview);
-        initData();
-        initView();
-    }
-
-    @Override
-    protected void initData() {
-        super.initData();
-    }
-
     @Override
     protected void initView() {
-        super.initView();
+        setContentView(R.layout.activity_elastic_srocllview);
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         tvTitle = (TextView)findViewById(R.id.tv_title);
         tvTitle.setText("有弹性的ScrollView");
@@ -52,8 +35,4 @@ public class ElasticScorllViewDemoActivity extends BaseActivity {
 
         }
     }
-
-
-
-
 }

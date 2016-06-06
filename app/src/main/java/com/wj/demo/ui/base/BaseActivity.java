@@ -25,12 +25,6 @@ import com.wj.library.helper.UIHelper;
 public class BaseActivity extends MyBaseActivity {
     private static final String TAG = BaseActivity.class.getName();
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
     /**
      * 获取上下文
      * @return
@@ -41,7 +35,6 @@ public class BaseActivity extends MyBaseActivity {
 
     @Override
     protected void initView() {
-
     }
 
     @Override
@@ -79,9 +72,6 @@ public class BaseActivity extends MyBaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         switch (id){

@@ -24,6 +24,7 @@ import org.json.JSONTokener;
  * json解析demo
  * 该demo仅仅是用来展示java原生提供的几个json类的使用方法，并没有单独封装
  * 代码量感觉很大，核心其实没多少
+ * 主要的几个类：JSONObject、JSONArray、JSONStringer、JSONTokener等掌握就够了
  * Created by wuj on 2016/6/3.
  * @version 1.0
  */
@@ -39,34 +40,14 @@ public class JsonDemoActivity extends BaseActivity {
     private JSONObject result;  //整个json解析和生成都将依托它
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_json);
-        initData();
-        initView();
-    }
-
-    @Override
     protected void initData() {
         super.initData();
         result = new JSONObject();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        DialogHelper.getMessageDialog(this, "当前页面demo仅仅是用来展示java原生提供的几个json类的使用方法，并没有单独封装", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        }).show();
-
-    }
-
-    @Override
     protected void initView() {
-        super.initView();
+        setContentView(R.layout.activity_json);
         tvJson = (TextView) findViewById(R.id.tv_json);
         btCreate = (Button) findViewById(R.id.bt_create);
         btResolve = (Button) findViewById(R.id.bt_resolve);
@@ -78,6 +59,14 @@ public class JsonDemoActivity extends BaseActivity {
         btResolve.setOnClickListener(this);
         ToolbarHelper.initToolbar(this,toolbar,R.mipmap.ic_back);
 
+        DialogHelper.getMessageDialog(this, "当前页面demo仅仅是用来展示java原生提供的几个json类的使用方法，并没有单独封装", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        }).show();
+
+        //演示最终示例：
         String json = "{\n" +
                 "    \"successful\": true,\n" +
                 "    \"statusCode\": \"1\",\n" +

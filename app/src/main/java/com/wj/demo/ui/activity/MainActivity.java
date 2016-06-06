@@ -1,14 +1,12 @@
 package com.wj.demo.ui.activity;
 
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,8 +16,7 @@ import com.wj.demo.domain.Item;
 import com.wj.demo.ui.adapter.AdapterRecyclerItem;
 import com.wj.demo.ui.base.BaseActivity;
 import com.wj.library.helper.ToastHelper;
-import com.wj.library.helper.UIHelper;
-import com.wj.library.util.DeviceUtil;
+import com.wj.library.helper.ToolbarHelper;
 
 import java.util.ArrayList;
 
@@ -27,6 +24,7 @@ public class MainActivity extends BaseActivity {
     private static String TAG = MainActivity.class.getName();
 
     private RecyclerView rvItem;
+    private Toolbar toolbar;
     private AdapterRecyclerItem adapterRecyclerItem;
     private ArrayList<Item> items;
 
@@ -42,8 +40,8 @@ public class MainActivity extends BaseActivity {
     protected void initView() {
         super.initView();
         rvItem = (RecyclerView)findViewById(R.id.rv_item);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        Log.e(TAG,items.size()+"");
         //地址动态添加
         adapterRecyclerItem = new AdapterRecyclerItem(this, items);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -51,9 +49,7 @@ public class MainActivity extends BaseActivity {
         rvItem.setLayoutManager(linearLayoutManager);
         rvItem.setAdapter(adapterRecyclerItem);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        initToolbar(toolbar);
+        ToolbarHelper.initToolbar(this,toolbar,R.string.app_name,R.mipmap.ic_drawer_home,Color.WHITE);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +57,27 @@ public class MainActivity extends BaseActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "idea_wj@163.com", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+            }
+        });
+
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int menuItemId = item.getItemId();
+                if (menuItemId == R.id.action_search) {
+                    ToastHelper.toastShort(MainActivity.this,R.string.menu_search);
+
+                } else if (menuItemId == R.id.action_notification) {
+                    ToastHelper.toastShort(MainActivity.this,R.string.menu_notifications);
+
+                } else if (menuItemId == R.id.action_settings) {
+                    ToastHelper.toastShort(MainActivity.this,R.string.item_setting);
+
+                } else if (menuItemId == R.id.action_about) {
+                    ToastHelper.toastShort(MainActivity.this,R.string.item_about);
+
+                }
+                return true;
             }
         });
     }
@@ -95,44 +112,9 @@ public class MainActivity extends BaseActivity {
         Item item6 = new Item();
         item6.setName("6.暂未开放");
         items.add(item6);
-
     }
 
-    private void initToolbar(Toolbar toolbar){
-        toolbar.setNavigationIcon(R.mipmap.ic_drawer_home);//设置导航栏图标
-        toolbar.setTitle(R.string.app_name);//设置主标题
-        toolbar.setTitleTextColor(Color.WHITE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-        {
-            toolbar.setPadding(toolbar.getPaddingLeft(),
-                    DeviceUtil.getStatusHeight(this),
-                    toolbar.getPaddingRight(),
-                    toolbar.getPaddingBottom());
-        }
-        //toolbar.inflateMenu(R.menu.base_toolbar_menu);//设置右上角的填充菜单,此不支持setSupportActionBar
-        setSupportActionBar(toolbar);
 
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                int menuItemId = item.getItemId();
-                if (menuItemId == R.id.action_search) {
-                    ToastHelper.toastShort(MainActivity.this,R.string.menu_search);
-
-                } else if (menuItemId == R.id.action_notification) {
-                    ToastHelper.toastShort(MainActivity.this,R.string.menu_notifications);
-
-                } else if (menuItemId == R.id.action_settings) {
-                    ToastHelper.toastShort(MainActivity.this,R.string.item_setting);
-
-                } else if (menuItemId == R.id.action_about) {
-                    ToastHelper.toastShort(MainActivity.this,R.string.item_about);
-
-                }
-                return true;
-            }
-        });
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

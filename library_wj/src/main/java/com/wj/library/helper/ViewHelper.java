@@ -1,8 +1,13 @@
 package com.wj.library.helper;
 
+import android.os.Build;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+
+import com.wj.library.util.DeviceUtil;
 
 /**
  * Created by idea_wj on 2016/6/1.
@@ -12,7 +17,7 @@ import android.view.ViewTreeObserver;
 public class ViewHelper {
 
     /**
-     * 在activity的Oncreate状态时，需用该方法才可以获取到某个view的长宽
+     * 1. 在activity的Oncreate状态时，需用该方法才可以获取到某个view的长宽
      * 或者在某些特殊情况下，也只有此方法可以最可靠的获取
      * @return
      */
@@ -27,10 +32,8 @@ public class ViewHelper {
         return view.getWidth();
     }
 
-
-
     /**
-     *
+     * 2.
      * @param view
      * @return 返回para后，用para.height即为高度，同理可找到宽度
      */
@@ -39,7 +42,7 @@ public class ViewHelper {
     }
 
     /**
-     * 修改控件的长宽
+     * 3.修改控件的长宽
      * @param width
      * @param height
      * @param view
@@ -51,5 +54,7 @@ public class ViewHelper {
         para.width = width;
         return para;
     }
+
+
 
 }

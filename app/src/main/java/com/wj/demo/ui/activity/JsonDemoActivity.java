@@ -2,6 +2,8 @@ package com.wj.demo.ui.activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,6 +12,7 @@ import com.wj.demo.R;
 import com.wj.demo.ui.base.BaseActivity;
 import com.wj.library.helper.DialogHelper;
 import com.wj.library.helper.ToastHelper;
+import com.wj.library.helper.ToolbarHelper;
 import com.wj.library.helper.UIHelper;
 
 import org.json.JSONArray;
@@ -29,6 +32,8 @@ public class JsonDemoActivity extends BaseActivity {
     private TextView tvJson;
     private Button btCreate;  //生成
     private Button btResolve;  //解析
+    private Toolbar toolbar;
+    private TextView tvTitle;
 
     private JSONObject result;  //整个json解析和生成都将依托它
 
@@ -64,9 +69,13 @@ public class JsonDemoActivity extends BaseActivity {
         tvJson = (TextView) findViewById(R.id.tv_json);
         btCreate = (Button) findViewById(R.id.bt_create);
         btResolve = (Button) findViewById(R.id.bt_resolve);
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        tvTitle = (TextView)findViewById(R.id.tv_title);
 
+        tvTitle.setText("JSON生成与解析");
         btCreate.setOnClickListener(this);
         btResolve.setOnClickListener(this);
+        ToolbarHelper.initToolbar(this,toolbar,R.mipmap.ic_back);
 
         String json = "{\n" +
                 "    \"successful\": true,\n" +
@@ -276,5 +285,22 @@ public class JsonDemoActivity extends BaseActivity {
         } catch (JSONException e) {
             ToastHelper.toastShort(this,"请先生成json");
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        switch (id){
+            case android.R.id.home:
+                UIHelper.activityFinish(this);
+                break;
+        }
+
+
+        return super.onOptionsItemSelected(item);
     }
 }

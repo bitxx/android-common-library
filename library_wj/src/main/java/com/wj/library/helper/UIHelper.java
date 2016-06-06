@@ -56,7 +56,5 @@ public class UIHelper {
         activity.startActivity(intent);
         MyBaseAppManager.getInstance().addActivity(activity);  //再新增
         MyBaseAppManager.getInstance().finishActivity(activity);  //栈顶先除去
-
-
     }
 }

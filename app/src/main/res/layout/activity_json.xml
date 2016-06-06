@@ -3,6 +3,13 @@
     style="@style/total_layout"
     android:orientation="vertical">
 
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/toolbar_common_1" />
+
+    </android.support.design.widget.AppBarLayout>
+
     <com.wj.library.widget.CustomerScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

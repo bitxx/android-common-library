@@ -5,8 +5,8 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/main_color_day</item>
-        <item name="android:fitsSystemWindows">true</item>
-        <!--  <item name="android:clipToPadding">true</item>-->
+        <!--  <item name="android:fitsSystemWindows">true</item>
+        <item name="android:clipToPadding">true</item>-->
     </style>
 
     <!--textview 公共布局-->

@@ -6,6 +6,16 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <!--<item name="android:textCursorDrawable">@null</item>-->
         <item name="android:windowNoTitle">true</item>
+        <!--api22需要去掉android前缀-->
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
+
+    </style>
+
+    <style name="MyBaseAppTheme.DarkActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <!--<item name="android:textCursorDrawable">@null</item>-->
+        <item name="android:windowNoTitle">true</item>
         <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
 
     </style>

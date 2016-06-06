@@ -1,5 +1,7 @@
 package com.wj.demo.ui.activity;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,6 +17,9 @@ import com.wj.demo.R;
 import com.wj.demo.domain.Item;
 import com.wj.demo.ui.adapter.AdapterRecyclerItem;
 import com.wj.demo.ui.base.BaseActivity;
+import com.wj.library.helper.ToastHelper;
+import com.wj.library.helper.UIHelper;
+import com.wj.library.util.DeviceUtil;
 
 import java.util.ArrayList;
 
@@ -47,7 +52,8 @@ public class MainActivity extends BaseActivity {
         rvItem.setAdapter(adapterRecyclerItem);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+        initToolbar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -92,10 +98,46 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    private void initToolbar(Toolbar toolbar){
+        toolbar.setNavigationIcon(R.mipmap.ic_drawer_home);//设置导航栏图标
+        toolbar.setTitle(R.string.app_name);//设置主标题
+        toolbar.setTitleTextColor(Color.WHITE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+        {
+            toolbar.setPadding(toolbar.getPaddingLeft(),
+                    DeviceUtil.getStatusHeight(this),
+                    toolbar.getPaddingRight(),
+                    toolbar.getPaddingBottom());
+        }
+        //toolbar.inflateMenu(R.menu.base_toolbar_menu);//设置右上角的填充菜单,此不支持setSupportActionBar
+        setSupportActionBar(toolbar);
+
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int menuItemId = item.getItemId();
+                if (menuItemId == R.id.action_search) {
+                    ToastHelper.toastShort(MainActivity.this,R.string.menu_search);
+
+                } else if (menuItemId == R.id.action_notification) {
+                    ToastHelper.toastShort(MainActivity.this,R.string.menu_notifications);
+
+                } else if (menuItemId == R.id.action_settings) {
+                    ToastHelper.toastShort(MainActivity.this,R.string.item_setting);
+
+                } else if (menuItemId == R.id.action_about) {
+                    ToastHelper.toastShort(MainActivity.this,R.string.item_about);
+
+                }
+                return true;
+            }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.base_toolbar_menu, menu);
         return true;
     }
 
@@ -106,10 +148,8 @@ public class MainActivity extends BaseActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
+
 
         return super.onOptionsItemSelected(item);
     }

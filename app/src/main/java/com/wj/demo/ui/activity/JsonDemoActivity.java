@@ -87,14 +87,14 @@ public class JsonDemoActivity extends BaseActivity {
                 "            \"vechicleTypelist\": [\n" +
                 "                {\n" +
                 "                    \"vechicleTypeId\": 1,\n" +
-                "                    \"vechicleTypeName\": \"小面新能源\",\n" +
+                "                    \"vechicleTypeName\": \"小轿车\",\n" +
                 "                    \"newEnergy\": \"Y\",\n" +
                 "                    \"initiatePrice\": 28.0\n" +
                 "                }\n" +
                 "            ],\n" +
                 "            \"vehicleModelId\": 1001,\n" +
                 "            \"vehicleModelinitiatePrice\": 28.0,\n" +
-                "            \"vehicleModelName\": \"小面\"\n" +
+                "            \"vehicleModelName\": \"秒包车\"\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"vechicleTypelist\": [\n" +
@@ -102,7 +102,7 @@ public class JsonDemoActivity extends BaseActivity {
                 "            ],\n" +
                 "            \"vehicleModelId\": 1002,\n" +
                 "            \"vehicleModelinitiatePrice\": 48.0,\n" +
-                "            \"vehicleModelName\": \"金杯\"\n" +
+                "            \"vehicleModelName\": \"卡车\"\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"vechicleTypelist\": [\n" +
@@ -110,7 +110,7 @@ public class JsonDemoActivity extends BaseActivity {
                 "            ],\n" +
                 "            \"vehicleModelId\": 1004,\n" +
                 "            \"vehicleModelinitiatePrice\": 95.0,\n" +
-                "            \"vehicleModelName\": \"4.2米箱货\"\n" +
+                "            \"vehicleModelName\": \"依维柯\"\n" +
                 "        }\n" +
                 "    ],\n" +
                 "    \"page\": null\n" +
@@ -118,14 +118,14 @@ public class JsonDemoActivity extends BaseActivity {
                 "    \"vechicleTypelist\": [\n" +
                 "        {\n" +
                 "            \"vechicleTypeId\": 1,\n" +
-                "            \"vechicleTypeName\": \"小面新能源\",\n" +
+                "            \"vechicleTypeName\": \"小小车\",\n" +
                 "            \"newEnergy\": \"Y\",\n" +
                 "            \"initiatePrice\": 28.0\n" +
                 "        }\n" +
                 "    ],\n" +
                 "    \"vehicleModelId\": 1001,\n" +
                 "    \"vehicleModelinitiatePrice\": 28.0,\n" +
-                "    \"vehicleModelName\": \"小面\"\n" +
+                "    \"vehicleModelName\": \"面包车\"\n" +
                 "}";
         tvJson.setText(json);
     }

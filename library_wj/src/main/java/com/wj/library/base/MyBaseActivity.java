@@ -1,6 +1,5 @@
 package com.wj.library.base;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,15 +21,12 @@ public abstract class MyBaseActivity extends AppCompatActivity implements View.O
     private long lastClickTime = 0;
     private InputMethodManager imm; //输入法控制
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         initData();
         initView();
-        //makeStatusBarTransitation();  //将状态栏设置为半透明,由于自定义的actionbar背景为白色，在小米手机上会遮挡了时间显示，暂时关闭，后期拓展
-        //processLogic(savedInstanceState);
     }
 
     @Override
@@ -43,8 +39,6 @@ public abstract class MyBaseActivity extends AppCompatActivity implements View.O
             myOnClick(v);//若大于延时,则执行业务
         }
     }
-
-
 
     @Override
     protected void onDestroy() {

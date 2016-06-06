@@ -8,7 +8,6 @@ import com.wj.demo.R;
 import com.wj.demo.ui.base.BaseActivity;
 import com.wj.library.helper.UIHelper;
 
-
 /**
  * @version 1.0
  * 启动应用时的加载界面
@@ -28,7 +27,6 @@ public class LoadingActivity extends BaseActivity {
             }
         }
     };
-
 
     @Override
     protected void initView() {
@@ -50,5 +48,4 @@ public class LoadingActivity extends BaseActivity {
         }).start();
 
     }
-
 }

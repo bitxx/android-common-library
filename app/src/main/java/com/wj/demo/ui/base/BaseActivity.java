@@ -1,7 +1,6 @@
 package com.wj.demo.ui.base;
 
 import android.content.pm.ActivityInfo;
-import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,12 +12,6 @@ import com.wj.library.helper.UIHelper;
 
 /**
  * @version 1.0
- * 新增：全局所有界面都保证状态栏半透明，在android4.4以上有效
- * 为同时保证界面布局正常，每个activity的xml布局最外层都要加上：android:fitsSystemWindows="true"
- *
- * 各activity的基类，通用处理方法均放在其中
- * initView();和initData();继承BaseActivity的子类，都建议实现其这两个方法并放在相应位置
- *
  * 注意:
  * @author idea_wj 2015-11-05
  */

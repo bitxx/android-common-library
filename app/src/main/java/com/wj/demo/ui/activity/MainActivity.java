@@ -83,7 +83,8 @@ public class MainActivity extends BaseActivity {
         items.add(item1);
 
         Item item2 = new Item();
-        item2.setName("2.Socket相关");
+        item2.setName("2.GIF动画");
+        item2.setActivity(DemoGifViewActivity.class);
         items.add(item2);
 
         Item item3 = new Item();
@@ -101,7 +102,7 @@ public class MainActivity extends BaseActivity {
         items.add(item5);
 
         Item item6 = new Item();
-        item6.setName("6.暂未开放");
+        item6.setName("6.Socket");
         items.add(item6);
     }
 

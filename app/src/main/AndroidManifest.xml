@@ -32,6 +32,7 @@
         <activity android:name=".ui.activity.DemoJsonActivity" />
         <activity android:name=".ui.activity.DemoElasticScorllViewActivity" />
         <activity android:name=".ui.activity.DemoChangeProtraitActivity" />
+        <activity android:name=".ui.activity.DemoGifViewActivity" />
     </application>
 
 </manifest>

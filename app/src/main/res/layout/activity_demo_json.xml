@@ -6,6 +6,7 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <include layout="@layout/toolbar_common_1" />
 
     </android.support.design.widget.AppBarLayout>
@@ -21,28 +22,13 @@
 
             <Button
                 android:id="@+id/bt_create"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/bt_select_1"
-                android:text="生成JSON"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+                style="@style/button"
+                android:text="生成JSON" />
 
             <Button
                 android:id="@+id/bt_resolve"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/bt_select_1"
-                android:text="解析JSON"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+                style="@style/button"
+                android:text="解析JSON" />
 
             <TextView
                 android:layout_width="wrap_content"

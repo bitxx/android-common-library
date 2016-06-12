@@ -42,7 +42,7 @@ public class DemoGifViewActivity extends BaseActivity {
         gif1 = (GifView)findViewById(R.id.gif_1);
         gif2 = (GifView)findViewById(R.id.gif_2);
         gif3 = (GifView)findViewById(R.id.gif_3);
-        gif1.setTimes(1);
+        gif1.setTimes(1);  //设置播放次数
         gif2.setTimes(2);
         gif3.setTimes(5);
         btChange = (Button)findViewById(R.id.bt_change);

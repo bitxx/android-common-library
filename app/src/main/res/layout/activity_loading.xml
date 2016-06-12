@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="启动页，将会是一个动画" />
+        android:text="~Hello World~" />
 
 
 </RelativeLayout>

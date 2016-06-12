@@ -7,6 +7,7 @@
 
 
 ##2016年06月12日更新
+GIF相关：
 <span>
     <div><br/></div>
     <div>
@@ -18,7 +19,7 @@
             </span>
         </span>
     </div>
-    GIF相关：
+
     <ol>
 
         <li>

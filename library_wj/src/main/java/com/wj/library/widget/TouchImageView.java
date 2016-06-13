@@ -25,7 +25,7 @@ public class TouchImageView extends View implements Observer {
     /**
      * Paint object used when drawing bitmap.
      */
-    private final Paint mPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
+    private final Paint mPaint = new Paint(Paint.FILTER_BITMAP_FLAG);  //抗锯齿
 
     /**
      * Rectangle used (and re-used) for cropping source image.
@@ -196,16 +196,16 @@ public class TouchImageView extends View implements Observer {
          */
         private BasicZoomControl mZoomControl;
 
-        private float mFirstX = -1;
-        private float mFirstY = -1;
+        private float mFirstX = -1; //第一个触控点坐标
+        private float mFirstY = -1;  //第二个触控点坐标
         private float mSecondX = -1;
         private float mSecondY = -1;
 
-        private int mOldCounts = 0;
+        private int mOldCounts = 0;  //记录上一次操作，有几个触控点
 
         /**
          * Sets the zoom control to manipulate
-         *
+         * 当有多个触控点的时候，此处有Bug,建议只保留两个触控点
          * @param control Zoom control
          */
         public void setZoomControl(BasicZoomControl control) {
@@ -228,7 +228,7 @@ public class TouchImageView extends View implements Observer {
 
                     if (1 == nCounts) {
                         mOldCounts = 1;
-                        float dx = (fFirstX - mFirstX) / v.getWidth();
+                        float dx = (fFirstX - mFirstX) / v.getWidth(); //dx>0，水平方向右移
                         float dy = (fFirstY - mFirstY) / v.getHeight();
                         mZoomControl.pan(-dx, -dy);
                     } else if (1 == mOldCounts) {
@@ -242,15 +242,15 @@ public class TouchImageView extends View implements Observer {
                                 .getY(event.getPointerId(nCounts - 1));
 
                         double nLengthOld = getLength(mFirstX, mFirstY, mSecondX,
-                                mSecondY);
+                                mSecondY); //计算缩放前，两点之间的距离
                         double nLengthNow = getLength(fFirstX, fFirstY, fSecondX,
-                                fSecondY);
+                                fSecondY);   //计算缩放后，两点之间的距离
 
                         float d = (float) ((nLengthNow - nLengthOld) / v.getWidth());
 
                         mZoomControl.zoom((float) Math.pow(20, d),
                                 ((fFirstX + fSecondX) / 2 / v.getWidth()),
-                                ((fFirstY + fSecondY) / 2 / v.getHeight()));
+                                ((fFirstY + fSecondY) / 2 / v.getHeight()));  //后两个参数大意是缩放的中心点x,y分别与视图的比例
 
                         mSecondX = fSecondX;
                         mSecondY = fSecondY;
@@ -271,6 +271,9 @@ public class TouchImageView extends View implements Observer {
         }
     }
 
+    /**
+     * 观察者，被添加到AspectQuotient被观察者中
+     */
     private class BasicZoomControl implements Observer {
 
         /**
@@ -425,10 +428,14 @@ public class TouchImageView extends View implements Observer {
         }
     }
 
+    /**
+     * 被观察者
+     */
     private class AspectQuotient extends Observable {
 
         /**
          * Aspect quotient
+         * 记录视图与图像的尺寸关系
          */
         private float mAspectQuotient;
 
@@ -456,7 +463,6 @@ public class TouchImageView extends View implements Observer {
                                          float contentWidth, float contentHeight) {
             final float aspectQuotient = (contentWidth / contentHeight)
                     / (viewWidth / viewHeight);
-
             if (aspectQuotient != mAspectQuotient) {
                 mAspectQuotient = aspectQuotient;
                 setChanged();
@@ -464,6 +470,9 @@ public class TouchImageView extends View implements Observer {
         }
     }
 
+    /**
+     * 被观察者，添加主类TouchImageView观察者
+     */
     private class ZoomState extends Observable {
         /**
          * Zoom level A value of 1.0 means the content fits the view.

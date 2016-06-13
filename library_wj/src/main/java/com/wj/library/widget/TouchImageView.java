@@ -65,9 +65,9 @@ public class TouchImageView extends View implements Observer {
 
         setZoomState(mZoomControl.getZoomState());
 
-        setOnTouchListener(mZoomListener);
+        setOnTouchListener(mZoomListener);  //将TouchImageView这观察者添加到状态类(被观察者)中
 
-        mZoomControl.setAspectQuotient(getAspectQuotient());
+        mZoomControl.setAspectQuotient(getAspectQuotient());   //将缩放控制这观察者添加到比例变化地被观察者中
     }
 
     public void zoomImage(float f, float x, float y) {
@@ -480,12 +480,14 @@ public class TouchImageView extends View implements Observer {
         private float mZoom;
 
         /**
+         * x平移
          * Pan position x-coordinate X-coordinate of zoom window center
          * position, relative to the width of the content.
          */
         private float mPanX;
 
         /**
+         * y平移
          * Pan position y-coordinate Y-coordinate of zoom window center
          * position, relative to the height of the content.
          */

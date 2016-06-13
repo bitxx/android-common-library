@@ -21,6 +21,10 @@ import android.widget.ImageView;
  * 2.设置动画是否暂停
  * 3.设置动画恢复初始
  * 4.监听指定次数播放完毕后的操作
+ *
+ * *原理：
+ * 1.大致是，借用了android的Movie类，存储每一帧
+ * 2.监听是通过起始时间到播放当前时间之间的时间与gif总时间相除，结果为播放次数
  */
 public class GifView extends ImageView {
     private static final String TAG = GifView.class.getSimpleName();

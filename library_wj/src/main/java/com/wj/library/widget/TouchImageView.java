@@ -221,8 +221,6 @@ public class TouchImageView extends View implements Observer {
          */
         public void zoom(float f, float x, float y) {
 
-            // Log.d("Zoom", "zoom f = " + f);
-
             final float aspectQuotient = mAspectQuotient.get();
 
             final float prevZoomX = mState.getZoomX(aspectQuotient);
@@ -234,14 +232,12 @@ public class TouchImageView extends View implements Observer {
             final float newZoomX = mState.getZoomX(aspectQuotient);
             final float newZoomY = mState.getZoomY(aspectQuotient);
 
-            // Pan to keep x and y coordinate invariant
             mState.setPanX(mState.getPanX() + (x - .5f)
                     * (1f / prevZoomX - 1f / newZoomX));
             mState.setPanY(mState.getPanY() + (y - .5f)
                     * (1f / prevZoomY - 1f / newZoomY));
 
             limitPan();
-
             mState.notifyObservers();
         }
 
@@ -297,18 +293,14 @@ public class TouchImageView extends View implements Observer {
             final float panMinY = .5f - getMaxPanDelta(zoomY);
             final float panMaxY = .5f + getMaxPanDelta(zoomY);
 
-            if (mState.getPanX() < panMinX) {
+            if (mState.getPanX() < panMinX)
                 mState.setPanX(panMinX);
-            }
-            if (mState.getPanX() > panMaxX) {
+            if (mState.getPanX() > panMaxX)
                 mState.setPanX(panMaxX);
-            }
-            if (mState.getPanY() < panMinY) {
+            if (mState.getPanY() < panMinY)
                 mState.setPanY(panMinY);
-            }
-            if (mState.getPanY() > panMaxY) {
+            if (mState.getPanY() > panMaxY)
                 mState.setPanY(panMaxY);
-            }
         }
 
         public void update(Observable observable, Object data) {

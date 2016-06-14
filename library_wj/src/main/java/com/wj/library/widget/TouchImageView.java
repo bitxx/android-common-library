@@ -26,42 +26,17 @@ import android.view.MotionEvent;
 public class TouchImageView extends View implements Observer {
     private static final String TAG = TouchImageView.class.getSimpleName();
 
-    /**
-     * Paint object used when drawing bitmap.
-     */
-    private final Paint mPaint = new Paint(Paint.FILTER_BITMAP_FLAG);  //抗锯齿
-
-    /**
-     * Rectangle used (and re-used) for cropping source image.
-     */
-    private final Rect mRectSrc = new Rect();  //图像可视范围内的，该坐标以图像view坐标为准，不是以屏幕坐标为准
-
-    /**
-     * Rectangle used (and re-used) for specifying drawing area on canvas.
-     */
-    private final Rect mRectDst = new Rect();
-
-    /**
-     * Object holding aspect quotient
-     */
-    private final AspectQuotient mAspectQuotient = new AspectQuotient();
-
-    /**
-     * The bitmap that we're zooming in, and drawing on the screen.
-     */
-    private Bitmap mBitmap;
-
-    /**
-     * State of the zoom.
-     */
-    private ZoomState mState;
-
+    private final Paint mPaint = new Paint(Paint.FILTER_BITMAP_FLAG); //抗锯齿画笔
+    private final Rect mRectSrc = new Rect();   //图像可视范围内的，该坐标以图像bitmap坐标为准，不是以屏幕坐标为准
+    private final Rect mRectDst = new Rect();   //将mRectSrc截取的图片画到其中
+    private final AspectQuotient mAspectQuotient = new AspectQuotient();  //尺寸管理
+    private Bitmap mBitmap;  //图片源
+    private ZoomState mState;   //缩放管理
     private BasicZoomControl mZoomControl;
     private BasicZoomListener mZoomListener;
 
     public TouchImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
         mZoomControl = new BasicZoomControl();
         mZoomListener = new BasicZoomListener();
         mZoomListener.setZoomControl(mZoomControl);
@@ -217,51 +192,28 @@ public class TouchImageView extends View implements Observer {
      */
     private class BasicZoomControl implements Observer {
 
-        /**
-         * Minimum zoom level limit
-         */
-        private static final float MIN_ZOOM = 1;
+        private static final float MIN_ZOOM = 1;  //最小缩放比
+        private static final float MAX_ZOOM = 16;  //最大缩放比
+        private final ZoomState mState = new ZoomState();  //缩放状态
+        private AspectQuotient mAspectQuotient;  //用于保证view和其中内容缩放时候不会发生形变，缩放比是固定的
 
         /**
-         * Maximum zoom level limit
-         */
-        private static final float MAX_ZOOM = 16;
-
-        /**
-         * Zoom state under control
-         */
-        private final ZoomState mState = new ZoomState();
-
-        /**
-         * Object holding aspect quotient of view and content
-         */
-        private AspectQuotient mAspectQuotient;
-
-        /**
-         * Set reference object holding aspect quotient
-         *
-         * @param aspectQuotient Object holding aspect quotient
+         * 观察者注册
+         * @param aspectQuotient  保持不变
          */
         public void setAspectQuotient(AspectQuotient aspectQuotient) {
-            if (mAspectQuotient != null) {
+            if (mAspectQuotient != null)
                 mAspectQuotient.deleteObserver(this);
-            }
-
             mAspectQuotient = aspectQuotient;
             mAspectQuotient.addObserver(this);
         }
 
-        /**
-         * Get zoom state being controlled
-         *
-         * @return The zoom state
-         */
         public ZoomState getZoomState() {
             return mState;
         }
 
         /**
-         * Zoom
+         * 缩放操作
          *
          * @param f Factor of zoom to apply
          * @param x X-coordinate of invariant position
@@ -294,7 +246,7 @@ public class TouchImageView extends View implements Observer {
         }
 
         /**
-         * Pan
+         * 单指移动操作
          *
          * @param dx Amount to pan in x-dimension
          * @param dy Amount to pan in y-dimension
@@ -313,28 +265,26 @@ public class TouchImageView extends View implements Observer {
         }
 
         /**
-         * Help function to figure out max delta of pan from center position.
-         *
-         * @param zoom Zoom value
-         * @return Max delta of pan
+         * 从中心最大移动位置
+         * @param zoom 缩放值
+         * @return
          */
         private float getMaxPanDelta(float zoom) {
             return Math.max(0f, .5f * ((zoom - 1) / zoom));
         }
 
         /**
-         * Force zoom to stay within limits
+         * 控制缩放值，不要超出限制的范围
          */
         private void limitZoom() {
-            if (mState.getZoom() < MIN_ZOOM) {
+            if (mState.getZoom() < MIN_ZOOM)
                 mState.setZoom(MIN_ZOOM);
-            } else if (mState.getZoom() > MAX_ZOOM) {
+            else if (mState.getZoom() > MAX_ZOOM)
                 mState.setZoom(MAX_ZOOM);
-            }
         }
 
         /**
-         * Force pan to stay within limits
+         * 平移限制
          */
         private void limitPan() {
             final float aspectQuotient = mAspectQuotient.get();
@@ -361,8 +311,6 @@ public class TouchImageView extends View implements Observer {
             }
         }
 
-        // Observable interface implementation
-
         public void update(Observable observable, Object data) {
             limitZoom();
             limitPan();
@@ -370,41 +318,32 @@ public class TouchImageView extends View implements Observer {
     }
 
     /**
-     * 被观察者
+     * 被观察者,控制更新BasicZoomControl
      */
     private class AspectQuotient extends Observable {
 
-        /**
-         * Aspect quotient
-         * 记录视图与图像的尺寸关系
-         */
-        private float mAspectQuotient;
-
-        // Public methods
+        private float mAspectQuotient;   //记录视图与图像的尺寸关系
 
         /**
-         * Gets aspect quotient
-         *
-         * @return The aspect quotient
+         * 获取尺寸关系
+         * @return
          */
         public float get() {
             return mAspectQuotient;
         }
 
         /**
-         * Updates and recalculates aspect quotient based on supplied view and
-         * content dimensions.
+         * 如果view的宽度高度没有发生变化，mAspectQuotient这个值是稳定不变的，通过该值的比例来设置步长等等
          *
-         * @param viewWidth     Width of view
-         * @param viewHeight    Height of view
-         * @param contentWidth  Width of content
-         * @param contentHeight Height of content
+         * @param viewWidth     view的宽度
+         * @param viewHeight    view的高度
+         * @param contentWidth  view中内容的宽度
+         * @param contentHeight view中内容的高度
          */
         public void updateAspectQuotient(float viewWidth, float viewHeight,
                                          float contentWidth, float contentHeight) {
-            final float aspectQuotient = (contentWidth / contentHeight)
-                    / (viewWidth / viewHeight);
-            Log.e(TAG,"初始，aspectQuotient="+aspectQuotient);
+            final float aspectQuotient = (contentWidth / contentHeight) / (viewWidth / viewHeight);
+            Log.e(TAG,"被观察者中，aspectQuotient="+aspectQuotient);
             if (aspectQuotient != mAspectQuotient) {
                 mAspectQuotient = aspectQuotient;
                 setChanged();  //用于确定数据发生变化，只有为true,通知才会起作用，观察者模式中比较重要的方法

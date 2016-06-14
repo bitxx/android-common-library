@@ -104,6 +104,11 @@ public class MainActivity extends BaseActivity {
         Item item6 = new Item();
         item6.setName("6.Socket");
         items.add(item6);
+
+        Item item7 = new Item();
+        item7.setName("7.图片手势缩放");
+        item7.setActivity(DemoZoomImageActivity.class);
+        items.add(item7);
     }
 
     @Override

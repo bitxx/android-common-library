@@ -3,8 +3,11 @@ package com.wj.library.widget;
 /**
  * Created by idea_wj on 16/5/23.
  * 可以手势缩放的imageview
+ *
+ * 备注：目前该控件是借助网上已有资源，后期将逐步修改与完善
+ * 1.该组件使用了设计模式中的-观察者模式，java中已经提供公共接口
+ * 2.该组件核心地方主要是单指滑动，以及缩放时，对坐标点、步长的控制
  */
-
 import android.view.View;
 
 
@@ -21,6 +24,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 public class TouchImageView extends View implements Observer {
+    private static final String TAG = TouchImageView.class.getSimpleName();
 
     /**
      * Paint object used when drawing bitmap.
@@ -30,7 +34,7 @@ public class TouchImageView extends View implements Observer {
     /**
      * Rectangle used (and re-used) for cropping source image.
      */
-    private final Rect mRectSrc = new Rect();
+    private final Rect mRectSrc = new Rect();  //图像可视范围内的，该坐标以图像view坐标为准，不是以屏幕坐标为准
 
     /**
      * Rectangle used (and re-used) for specifying drawing area on canvas.
@@ -59,116 +63,53 @@ public class TouchImageView extends View implements Observer {
         super(context, attrs);
 
         mZoomControl = new BasicZoomControl();
-
         mZoomListener = new BasicZoomListener();
         mZoomListener.setZoomControl(mZoomControl);
-
         setZoomState(mZoomControl.getZoomState());
-
         setOnTouchListener(mZoomListener);  //将TouchImageView这观察者添加到状态类(被观察者)中
-
-        mZoomControl.setAspectQuotient(getAspectQuotient());   //将缩放控制这观察者添加到比例变化地被观察者中
-    }
-
-    public void zoomImage(float f, float x, float y) {
-        mZoomControl.zoom(f, x, y);
+        mZoomControl.setAspectQuotient(mAspectQuotient);   //将缩放控制这观察者添加到比例变化地被观察者中
     }
 
     public void setImage(Bitmap bitmap) {
         mBitmap = bitmap;
-
-        mAspectQuotient.updateAspectQuotient(getWidth(), getHeight(),
-                mBitmap.getWidth(), mBitmap.getHeight());
-        mAspectQuotient.notifyObservers();
-
-        invalidate();
     }
 
     private void setZoomState(ZoomState state) {
-        if (mState != null) {
+        if (mState != null)
             mState.deleteObserver(this);
-        }
-
         mState = state;
         mState.addObserver(this);
-
         invalidate();
-    }
-
-    private AspectQuotient getAspectQuotient() {
-        return mAspectQuotient;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         if (mBitmap != null && mState != null) {
 
-            Log.d("ZoomImageView", "OnDraw");
-
             final float aspectQuotient = mAspectQuotient.get();
 
-            final int viewWidth = getWidth();
+            final int viewWidth = getWidth(); //该值不变
             final int viewHeight = getHeight();
-            final int bitmapWidth = mBitmap.getWidth();
+            final int bitmapWidth = mBitmap.getWidth(); //该值不变
             final int bitmapHeight = mBitmap.getHeight();
-
-            Log.d("ZoomImageView", "viewWidth = " + viewWidth);
-            Log.d("ZoomImageView", "viewHeight = " + viewHeight);
-            Log.d("ZoomImageView", "bitmapWidth = " + bitmapWidth);
-            Log.d("ZoomImageView", "bitmapHeight = " + bitmapHeight);
 
             final float panX = mState.getPanX();
             final float panY = mState.getPanY();
             final float zoomX = mState.getZoomX(aspectQuotient) * viewWidth
-                    / bitmapWidth;
+                    / bitmapWidth;  //水平方向是原先的倍数
             final float zoomY = mState.getZoomY(aspectQuotient) * viewHeight
                     / bitmapHeight;
 
-            // Setup source and destination rectangles
             mRectSrc.left = (int) (panX * bitmapWidth - viewWidth / (zoomX * 2));
             mRectSrc.top = (int) (panY * bitmapHeight - viewHeight
                     / (zoomY * 2));
-            mRectSrc.right = (int) (mRectSrc.left + viewWidth / zoomX);
+            mRectSrc.right = (int) (mRectSrc.left + viewWidth / zoomX);  //viewWidth / zoomX,加入当前缩放比为2，也就是为原先两倍，但视图范围内只能显示一倍，因此必须除以
             mRectSrc.bottom = (int) (mRectSrc.top + viewHeight / zoomY);
-            // mRectDst.left = getLeft();
+
             mRectDst.left = 0;
             mRectDst.top = 0;
-            // mRectDst.right = getRight();
             mRectDst.right = getWidth();
             mRectDst.bottom = getHeight();
-
-            // Adjust source rectangle so that it fits within the source image.
-            if (mRectSrc.left < 0) {
-                mRectDst.left += -mRectSrc.left * zoomX;
-                mRectSrc.left = 0;
-            }
-            if (mRectSrc.right > bitmapWidth) {
-                mRectDst.right -= (mRectSrc.right - bitmapWidth) * zoomX;
-                mRectSrc.right = bitmapWidth;
-            }
-            if (mRectSrc.top < 0) {
-                mRectDst.top += -mRectSrc.top * zoomY;
-                mRectSrc.top = 0;
-            }
-            if (mRectSrc.bottom > bitmapHeight) {
-                mRectDst.bottom -= (mRectSrc.bottom - bitmapHeight) * zoomY;
-                mRectSrc.bottom = bitmapHeight;
-            }
-
-            mRectDst.left = 0;
-            mRectDst.top = 0;
-            mRectDst.right = viewWidth;
-            mRectDst.bottom = viewHeight;
-
-            Log.d("ZoomImageView", "mRectSrc.top" + mRectSrc.top);
-            Log.d("ZoomImageView", "mRectSrc.bottom" + mRectSrc.bottom);
-            Log.d("ZoomImageView", "mRectSrc.left" + mRectSrc.left);
-            Log.d("ZoomImageView", "mRectSrc.right" + mRectSrc.right);
-
-            Log.d("ZoomImageView", "mRectDst.top" + mRectDst.top);
-            Log.d("ZoomImageView", "mRectDst.bottom" + mRectDst.bottom);
-            Log.d("ZoomImageView", "mRectDst.left" + mRectDst.left);
-            Log.d("ZoomImageView", "mRectDst.right" + mRectDst.right);
 
             canvas.drawBitmap(mBitmap, mRectSrc, mRectDst, mPaint);
         }
@@ -178,7 +119,7 @@ public class TouchImageView extends View implements Observer {
     protected void onLayout(boolean changed, int left, int top, int right,
                             int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-
+        Log.e(TAG,"onLayout方法执行");
         mAspectQuotient.updateAspectQuotient(right - left, bottom - top,
                 mBitmap.getWidth(), mBitmap.getHeight());
         mAspectQuotient.notifyObservers();
@@ -401,7 +342,7 @@ public class TouchImageView extends View implements Observer {
             final float zoomX = mState.getZoomX(aspectQuotient);
             final float zoomY = mState.getZoomY(aspectQuotient);
 
-            final float panMinX = .5f - getMaxPanDelta(zoomX);
+            final float panMinX = .5f - getMaxPanDelta(zoomX); //最小最大移动变化幅度
             final float panMaxX = .5f + getMaxPanDelta(zoomX);
             final float panMinY = .5f - getMaxPanDelta(zoomY);
             final float panMaxY = .5f + getMaxPanDelta(zoomY);
@@ -463,9 +404,10 @@ public class TouchImageView extends View implements Observer {
                                          float contentWidth, float contentHeight) {
             final float aspectQuotient = (contentWidth / contentHeight)
                     / (viewWidth / viewHeight);
+            Log.e(TAG,"初始，aspectQuotient="+aspectQuotient);
             if (aspectQuotient != mAspectQuotient) {
                 mAspectQuotient = aspectQuotient;
-                setChanged();
+                setChanged();  //用于确定数据发生变化，只有为true,通知才会起作用，观察者模式中比较重要的方法
             }
         }
     }
@@ -477,7 +419,7 @@ public class TouchImageView extends View implements Observer {
         /**
          * Zoom level A value of 1.0 means the content fits the view.
          */
-        private float mZoom;
+        private float mZoom;  //缩放等级1~16 有小数
 
         /**
          * x平移
@@ -487,7 +429,7 @@ public class TouchImageView extends View implements Observer {
         private float mPanX;
 
         /**
-         * y平移
+         * y平移位移，保证平滑
          * Pan position y-coordinate Y-coordinate of zoom window center
          * position, relative to the height of the content.
          */
@@ -497,7 +439,6 @@ public class TouchImageView extends View implements Observer {
 
         /**
          * Get current x-pan
-         *
          * @return current x-pan
          */
         public float getPanX() {
@@ -539,7 +480,7 @@ public class TouchImageView extends View implements Observer {
          * @return Current zoom value in y-dimension
          */
         public float getZoomY(float aspectQuotient) {
-            return Math.min(mZoom, mZoom / aspectQuotient);
+            return Math.min(mZoom, mZoom * aspectQuotient);
         }
 
         /**

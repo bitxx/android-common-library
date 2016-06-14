@@ -33,6 +33,7 @@
         <activity android:name=".ui.activity.DemoElasticScorllViewActivity" />
         <activity android:name=".ui.activity.DemoChangeProtraitActivity" />
         <activity android:name=".ui.activity.DemoGifViewActivity" />
+        <activity android:name=".ui.activity.DemoZoomImageActivity" />
     </application>
 
 </manifest>

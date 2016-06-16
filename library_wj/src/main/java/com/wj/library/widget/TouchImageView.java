@@ -8,6 +8,7 @@ package com.wj.library.widget;
  * 1.该组件使用了设计模式中的-观察者模式，java中已经提供公共接口
  * 2.该组件核心地方主要是单指滑动，以及缩放时，对坐标点、步长的控制
  */
+import android.util.Log;
 import android.view.View;
 
 
@@ -186,7 +187,8 @@ public class TouchImageView extends View implements Observer {
             limitZoom();
 
             final float newZoom = mState.getZoom();
-
+            //Log.e(TAG,((x - .5f) * (1f / preZoom - 1f / newZoom))+"");
+//下面这两行咋计算的？
             mState.setPanX(mState.getPanX() + (x - .5f) * (1f / preZoom - 1f / newZoom));
             mState.setPanY(mState.getPanY() + (y - .5f) * (1f / preZoom - 1f / newZoom));
 

@@ -4,11 +4,14 @@ package com.wj.library.widget;
  * Created by idea_wj on 16/5/23.
  * 可以手势缩放的imageview
  *
- * 备注：目前该控件是借助网上已有资源，后期将逐步修改与完善
- * 1.该组件使用了设计模式中的-观察者模式，java中已经提供公共接口
- * 2.该组件核心地方主要是单指滑动，以及缩放时，对坐标点、步长的控制
+ * 备注：该控件是网络资源中找到的，计算比较麻烦，自己也没看懂，经过调整，删减了100多行代码，
+ * 这控件只能作为基本的缩放、移动使用，
+ * 主要是用来更清晰的研究缩放移动的核心原理，其余的需要自己扩充，
+ * zoom()方法中的计算过程，我没理解了，要是有童鞋知道这个计算是怎么回事，麻烦请告知一下，感激不尽
+ * 该控件使用了观察者模式，很受启发，打算借用这一模式重新实现一个缩放组件（继承ImageView）
+ * 欢迎关注我的主页：https://github.com/jason-wj/android-common-library
  */
-import android.util.Log;
+
 import android.view.View;
 
 
@@ -73,6 +76,7 @@ public class TouchImageView extends View implements Observer {
             final float panX = mState.getPanX();
             final float panY = mState.getPanY();
 
+            //panX * bitmapWidth表示图片可视区域的中心
             mRectSrc.left = (int) (panX * bitmapWidth - bitmapWidth / (zoom * 2)); //相对于bitmap的坐标
             mRectSrc.top = (int) (panY * bitmapHeight - bitmapHeight / (zoom * 2));
             mRectSrc.right = (int) (mRectSrc.left + bitmapWidth / zoom);
@@ -188,7 +192,19 @@ public class TouchImageView extends View implements Observer {
 
             final float newZoom = mState.getZoom();
             //Log.e(TAG,((x - .5f) * (1f / preZoom - 1f / newZoom))+"");
-//下面这两行咋计算的？
+
+            /**
+             * 自己理解：
+             * 中心可视位置：代表屏幕的正中间，panX和panY初始就已经设置为0.5了，代表该意思
+             * 需要完整的看待公式，完整公式应该是这样（以x方向为例）：
+             * (mState.getPanX()* bitmapWidth + (x - .5f) * ((1f / preZoom - 1f / newZoom)* bitmapWidth)) - bitmapWidth / (zoom * 2)
+             * 其中：
+             * mState.getPanX()* bitmapWidth表示：上一次滑动位置，可视范围的中心，距离bitmap左边界的距离,假设为S
+             * (x - .5f) * (1f / preZoom - 1f / newZoom)* bitmapWidth)表示：这次滑动后的总的可视范围的中心与bitmap左边界的距离S1-S的差
+             * 所以，当前滑动状态下，中心可视位置距离bitmap左边界的距离为S+S1-S = S1;
+             *
+             */
+            //下面这两行咋计算的？
             mState.setPanX(mState.getPanX() + (x - .5f) * (1f / preZoom - 1f / newZoom));
             mState.setPanY(mState.getPanY() + (y - .5f) * (1f / preZoom - 1f / newZoom));
 

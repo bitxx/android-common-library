@@ -125,7 +125,7 @@ public class ZoomImageView extends ImageView implements OnScaleGestureListener,
 
     @Override
     public void onGlobalLayout() {
-        if (once) {
+        /*if (once) {
             Drawable d = getDrawable();
             if (d == null)
                 return;
@@ -154,7 +154,7 @@ public class ZoomImageView extends ImageView implements OnScaleGestureListener,
                     .postScale(scale, scale, getWidth() / 2, getHeight() / 2);
             setImageMatrix(mScaleMatrix);
             once = false;
-        }
+        }*/
 
     }
 

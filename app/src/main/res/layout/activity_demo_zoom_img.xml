@@ -11,7 +11,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <com.wj.library.widget.TouchImageView
+    <com.wj.library.widget.ZoomImageView
         android:id="@+id/tiv_img"
         android:layout_gravity="center"
         android:layout_width="match_parent"

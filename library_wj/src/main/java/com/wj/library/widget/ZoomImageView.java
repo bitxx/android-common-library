@@ -3,6 +3,7 @@ package com.wj.library.widget;
 
 import android.content.Context;
 import android.graphics.Matrix;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -33,6 +34,14 @@ public class ZoomImageView extends ImageView implements OnScaleGestureListener,
 
     private boolean once = true;
 
+    private boolean isCanDrag = true;
+    private int lastPointerCount;
+    private float mLastX;
+    private float mLastY;
+    private boolean isCheckLeftAndRight;
+    private boolean isCheckTopAndBottom;
+    private float mTouchSlop = 10;
+
     /**
      * 缩放的手势检测
      */
@@ -54,7 +63,7 @@ public class ZoomImageView extends ImageView implements OnScaleGestureListener,
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
         float scale = getScale();
-        float scaleFactor = detector.getScaleFactor();
+        float scaleFactor = detector.getScaleFactor();//当前图片和上一次缩放前做比较，比例，大于1，则扩大，小于1则缩小
 
         if (getDrawable() == null)
             return true;
@@ -95,8 +104,140 @@ public class ZoomImageView extends ImageView implements OnScaleGestureListener,
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        return mScaleGestureDetector.onTouchEvent(event);
+        mScaleGestureDetector.onTouchEvent(event);
 
+        float x = 0, y = 0;
+        // 拿到触摸点的个数
+        final int pointerCount = event.getPointerCount();
+        // 得到多个触摸点的x与y均值
+        for (int i = 0; i < pointerCount; i++)
+        {
+            x += event.getX(i);
+            y += event.getY(i);
+        }
+        x = x / pointerCount;
+        y = y / pointerCount;
+
+        /**
+         * 每当触摸点发生变化时，重置mLasX , mLastY
+         */
+        if (pointerCount != lastPointerCount)
+        {
+            isCanDrag = false;
+            mLastX = x;
+            mLastY = y;
+        }
+
+
+        lastPointerCount = pointerCount;
+
+        switch (event.getAction())
+        {
+            case MotionEvent.ACTION_MOVE:
+                Log.e(TAG, "ACTION_MOVE");
+                float dx = x - mLastX;
+                float dy = y - mLastY;
+
+                if (!isCanDrag)
+                {
+                    isCanDrag = isCanDrag(dx, dy);
+                }
+                if (isCanDrag)
+                {
+                    RectF rectF = getMatrixRectF();
+                    if (getDrawable() != null)
+                    {
+                        isCheckLeftAndRight = isCheckTopAndBottom = true;
+                        // 如果宽度小于屏幕宽度，则禁止左右移动
+                        if (rectF.width() < getWidth())
+                        {
+                            dx = 0;
+                            isCheckLeftAndRight = false;
+                        }
+                        // 如果高度小雨屏幕高度，则禁止上下移动
+                        if (rectF.height() < getHeight())
+                        {
+                            dy = 0;
+                            isCheckTopAndBottom = false;
+                        }
+                        mScaleMatrix.postTranslate(dx, dy);
+                        checkMatrixBounds();
+                        setImageMatrix(mScaleMatrix);
+                    }
+                }
+                mLastX = x;
+                mLastY = y;
+                break;
+
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                Log.e(TAG, "ACTION_UP");
+                lastPointerCount = 0;
+                break;
+        }
+
+        return true;
+
+    }
+
+    /**
+     * 移动时，进行边界判断，主要判断宽或高大于屏幕的
+     */
+    private void checkMatrixBounds()
+    {
+        RectF rect = getMatrixRectF();
+
+        float deltaX = 0, deltaY = 0;
+        final float viewWidth = getWidth();
+        final float viewHeight = getHeight();
+        // 判断移动或缩放后，图片显示是否超出屏幕边界
+        if (rect.top > 0 && isCheckTopAndBottom)
+        {
+            deltaY = -rect.top;
+        }
+        if (rect.bottom < viewHeight && isCheckTopAndBottom)
+        {
+            deltaY = viewHeight - rect.bottom;
+        }
+        if (rect.left > 0 && isCheckLeftAndRight)
+        {
+            deltaX = -rect.left;
+        }
+        if (rect.right < viewWidth && isCheckLeftAndRight)
+        {
+            deltaX = viewWidth - rect.right;
+        }
+        mScaleMatrix.postTranslate(deltaX, deltaY);
+    }
+
+    /**
+     * 根据当前图片的Matrix获得图片的范围
+     *
+     * @return
+     */
+    private RectF getMatrixRectF()
+    {
+        Matrix matrix = mScaleMatrix;
+        RectF rect = new RectF();
+        Drawable d = getDrawable();
+        if (null != d)
+        {
+            rect.set(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+            matrix.mapRect(rect);
+        }
+        return rect;
+    }
+
+    /**
+     * 是否是推动行为
+     *
+     * @param dx
+     * @param dy
+     * @return
+     */
+    private boolean isCanDrag(float dx, float dy)
+    {
+        return Math.sqrt((dx * dx) + (dy * dy)) >= mTouchSlop;
     }
 
 
@@ -106,7 +247,7 @@ public class ZoomImageView extends ImageView implements OnScaleGestureListener,
      * @return
      */
     public final float getScale() {
-        mScaleMatrix.getValues(matrixValues);
+        mScaleMatrix.getValues(matrixValues); //将mScaleMatrix的值复制进
         return matrixValues[Matrix.MSCALE_X];
     }
 
@@ -125,7 +266,8 @@ public class ZoomImageView extends ImageView implements OnScaleGestureListener,
 
     @Override
     public void onGlobalLayout() {
-        /*if (once) {
+        Log.e(TAG,"执行");
+        if (once) {
             Drawable d = getDrawable();
             if (d == null)
                 return;
@@ -154,7 +296,7 @@ public class ZoomImageView extends ImageView implements OnScaleGestureListener,
                     .postScale(scale, scale, getWidth() / 2, getHeight() / 2);
             setImageMatrix(mScaleMatrix);
             once = false;
-        }*/
+        }
 
     }
 

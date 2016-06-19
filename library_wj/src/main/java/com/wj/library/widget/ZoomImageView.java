@@ -85,8 +85,8 @@ public class ZoomImageView extends ImageView implements OnScaleGestureListener,
             /**
              * 设置缩放比例
              */
-            mScaleMatrix.postScale(scaleFactor, scaleFactor, getWidth() / 2,
-                    getHeight() / 2);
+            //mScaleMatrix.postScale(scaleFactor, scaleFactor, getWidth() / 2,getHeight() / 2);  //中心缩放
+            mScaleMatrix.postScale(scaleFactor,scaleFactor,detector.getFocusX(),detector.getFocusY());  //缩放焦点
             setImageMatrix(mScaleMatrix);
         }
         return true;
@@ -212,18 +212,23 @@ public class ZoomImageView extends ImageView implements OnScaleGestureListener,
 
     /**
      * 根据当前图片的Matrix获得图片的范围
-     *
+     * 将矩阵应用到矩形
+     * 返回的矩形中，rect.left，rect.right,rect.top,rect.bottom分别就就是当前屏幕离你的图片的边界的距离
      * @return
      */
     private RectF getMatrixRectF()
     {
         Matrix matrix = mScaleMatrix;
         RectF rect = new RectF();
-        Drawable d = getDrawable();
+        Drawable d = getDrawable(); //原始图片，没有缩放等等操作的
         if (null != d)
         {
             rect.set(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-            matrix.mapRect(rect);
+            Log.e(TAG,"old:left="+rect.left+" right="+rect.right+" top="+rect.top+" bottom="+rect.bottom);
+            Log.e(TAG,"width="+rect.width()+" height="+rect.height());
+            matrix.mapRect(rect); //原先矩阵matrix 缩放等等参数，将rect的默认坐标转换为实际坐标
+            Log.e(TAG,"new:left="+rect.left+" right="+rect.right+" top="+rect.top+" bottom="+rect.bottom);
+            Log.e(TAG,"width="+rect.width()+" height="+rect.height());
         }
         return rect;
     }
@@ -266,12 +271,11 @@ public class ZoomImageView extends ImageView implements OnScaleGestureListener,
 
     @Override
     public void onGlobalLayout() {
-        Log.e(TAG,"执行");
         if (once) {
             Drawable d = getDrawable();
             if (d == null)
                 return;
-            Log.e(TAG, d.getIntrinsicWidth() + " , " + d.getIntrinsicHeight());
+            //Log.e(TAG, d.getIntrinsicWidth() + " , " + d.getIntrinsicHeight());
             int width = getWidth();
             int height = getHeight();
             // 拿到图片的宽和高
@@ -291,7 +295,7 @@ public class ZoomImageView extends ImageView implements OnScaleGestureListener,
             }
             initScale = scale;
             // 图片移动至屏幕中心
-            mScaleMatrix.postTranslate((width - dw) / 2, (height - dh) / 2);
+            mScaleMatrix.postTranslate((dw) / 2, (dh) / 2);
             mScaleMatrix
                     .postScale(scale, scale, getWidth() / 2, getHeight() / 2);
             setImageMatrix(mScaleMatrix);

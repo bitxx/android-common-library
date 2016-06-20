@@ -15,11 +15,11 @@ import android.view.View.OnTouchListener;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
-public class ZoomImageView extends ImageView implements OnScaleGestureListener,
+public class ZoomImageViewTest extends ImageView implements OnScaleGestureListener,
         OnTouchListener, ViewTreeObserver.OnGlobalLayoutListener
 
 {
-    private static final String TAG = ZoomImageView.class.getSimpleName();
+    private static final String TAG = ZoomImageViewTest.class.getSimpleName();
 
     public static final float SCALE_MAX = 4.0f;
     /**
@@ -49,11 +49,11 @@ public class ZoomImageView extends ImageView implements OnScaleGestureListener,
 
     private final Matrix mScaleMatrix = new Matrix();
 
-    public ZoomImageView(Context context) {
+    public ZoomImageViewTest(Context context) {
         this(context, null);
     }
 
-    public ZoomImageView(Context context, AttributeSet attrs) {
+    public ZoomImageViewTest(Context context, AttributeSet attrs) {
         super(context, attrs);
         super.setScaleType(ScaleType.MATRIX);
         mScaleGestureDetector = new ScaleGestureDetector(context, this);

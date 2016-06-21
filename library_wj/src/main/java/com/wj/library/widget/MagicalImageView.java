@@ -1,7 +1,8 @@
 package com.wj.library.widget;
 
 import android.content.Context;
-import android.graphics.Matrix;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -31,6 +32,8 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
         super(context, attrs, defStyleAttr);
     }
 
+    private boolean isInitLayout = true;  //是否需要重新布局
+
     /**
      * 设置图片类型
      * @param type
@@ -40,9 +43,41 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
     }
 
 
+    /**
+     * 若子控件等等，将会多次执行该方法
+     */
     @Override
     public void onGlobalLayout() {
 
+        if(isInitLayout) {
+            Drawable drawable = getDrawable();
+            int viewWidth = getWidth();
+            int viewHeight = getHeight();
+            int imgWidth = drawable.getIntrinsicWidth();
+            int imgHeight = drawable.getIntrinsicHeight();
+
+            switch (type) {
+                case FIT_XY:
+                    break;
+                case FIT_START:
+                    break;
+                case FIT_CENTER:
+                    break;
+                case FIT_END:
+                    break;
+                case CENTER:
+                    break;
+                case CENTER_CROP:
+                    break;
+                case CENTER_INSIDE:
+                    break;
+            }
+        }
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
     }
 
     /**
@@ -50,10 +85,13 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
      * 由于重写了ImageView缘故，原先的ScaleType不能使用，需要在此使用setType()方法
      */
     public enum Type{
-        IT_XY      (1),
+        FIT_XY      (1),
 
         FIT_START   (2),
 
+        /**
+         * 把图片按比例扩大/缩小到View的宽度，居中显示
+         */
         FIT_CENTER  (3),
 
         FIT_END     (4),

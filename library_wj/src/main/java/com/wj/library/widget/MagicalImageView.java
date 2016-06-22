@@ -87,7 +87,7 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
                     initView(0,0,viewWidth * 1f /imgWidth,viewHeight * 1f /imgHeight,0,0);
                     break;
                 case FIT_START:
-                    float scaleX = Math.min(viewWidth * 1f /imgWidth,viewHeight * 1f /imgHeight);  //两个方向,以最小缩放比为基础
+                    float scaleX = Math.max(viewWidth * 1f /imgWidth,viewHeight * 1f /imgHeight);  //两个方向,以最大缩放比为基础
                     initView(0,0,scaleX,scaleX,0,0);  //两个方向缩放都一致
                     break;
                 case FIT_CENTER:

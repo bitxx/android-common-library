@@ -11,8 +11,8 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <com.wj.library.widget.ZoomImageViewTest
-        android:id="@+id/tiv_img"
+    <com.wj.library.widget.MagicalImageView
+        android:id="@+id/miv_img"
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

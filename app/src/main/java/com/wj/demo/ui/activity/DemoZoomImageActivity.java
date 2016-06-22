@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.wj.demo.R;
 import com.wj.demo.ui.base.BaseActivity;
 import com.wj.library.helper.ToolbarHelper;
-import com.wj.library.widget.ZoomImageViewTest;
+import com.wj.library.widget.MagicalImageView;
 
 /**
  * 图片手势缩放demo
@@ -20,7 +20,7 @@ public class DemoZoomImageActivity extends BaseActivity {
 
     private Toolbar toolbar;
     private TextView tvTitle;
-    private ZoomImageViewTest tivImage;
+    private MagicalImageView mivImage;
 
     @Override
     protected void initView() {
@@ -31,10 +31,10 @@ public class DemoZoomImageActivity extends BaseActivity {
         tvTitle.setText("图片手势缩放");
         ToolbarHelper.initToolbar(this,toolbar,R.mipmap.ic_back);
 
-        tivImage = (ZoomImageViewTest)findViewById(R.id.tiv_img);
+        mivImage = (MagicalImageView) findViewById(R.id.miv_img);
         Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(),
                 R.mipmap.demo_img_zoom);
-        tivImage.setImageBitmap(bitmap);
+        mivImage.setImageBitmap(bitmap);
     }
 
     @Override

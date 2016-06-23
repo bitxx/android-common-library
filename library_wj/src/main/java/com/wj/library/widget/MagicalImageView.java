@@ -1,14 +1,17 @@
 package com.wj.library.widget;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
-import com.wj.library.helper.ToastHelper;
 
 /**
  * 该imageview目前支持功能：
@@ -19,12 +22,68 @@ import com.wj.library.helper.ToastHelper;
  * Created by wuj on 2016/6/20.
  *
  */
-public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGlobalLayoutListener {
+public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGlobalLayoutListener
+        ,ScaleGestureDetector.OnScaleGestureListener
+        ,View.OnTouchListener {
+    private static final String TAG = MagicalImageView.class.getSimpleName();
 
+    /**
+     * 图片的最大缩放比
+     */
+    private float SCALE_MAX = 8f;
+
+    /**
+     * 图片显示方式，默认Type.FIT_CENTER
+     */
     private Type type = Type.FIT_CENTER;
-    private boolean isInitLayout = true;  //是否需要重新布局
-    private float scale = 1.0f; //当前手势缩放尺寸,默认为1.0f。不能和初始化时候地缩放比混合,该缩放是以视图初始化结束后地展示为基础
-    private final Matrix matrix = new Matrix();   //图像操作地矩阵,3x3的
+
+    /**
+     * 是否需要重新布局
+     */
+    private boolean isInitLayout = true;
+
+    /**
+     * 当前手势缩放尺寸,默认为1.0f。不能和初始化时候地缩放比混合,该缩放是以视图初始化结束后地展示为基础
+     */
+    private float scale = 1.0f;
+
+    /**
+     * 图像操作地矩阵,3x3的
+     */
+    private final Matrix matrix = new Matrix();
+
+    /**
+     * 用于将matrix中的9个值存放在其中
+     */
+    private final float[] matrixValues = new float[9];
+
+    /**
+     * 初始化时候，保存图片所在位置的坐标，用于之后操作的参考
+     */
+    private final RectF initRectF = new RectF();
+
+    /**
+     * initView()方法中初始化
+     * x方向最小缩放比，需要根据图片大小，以及初始化显示模式Type来决定，默认1.0
+     */
+    private float minXScale = 1.0f;
+
+    /**
+     * initView()方法中初始化
+     * y方向最小缩放比，需要根据图片大小，以及初始化显示模式Type来决定，默认1.0
+     */
+    private float minYScale = 1.0f;
+
+    /**
+     * 手势缩放，需要借用onTouchListener
+     */
+    private ScaleGestureDetector mScaleGestureDetector;
+
+    /**
+     * 保存上一次平移前的焦点坐标点
+     */
+    float xOldCenter = -1,yOldCenter = -1;
+
 
     public MagicalImageView(Context context) {
         super(context,null);
@@ -33,7 +92,8 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
     public MagicalImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         super.setScaleType(ScaleType.MATRIX);  //自定义展示,这样一来,用户无论设置别的类型地,都无效
-        setType(Type.FIT_START);
+        mScaleGestureDetector = new ScaleGestureDetector(context,this);
+        setOnTouchListener(this);
     }
 
     public MagicalImageView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -48,6 +108,25 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
         this.type = type;
     }
 
+    /**
+     * 获取x方向的缩放比
+     * 不可被继承
+     * @return
+     */
+    public final float getXScale(){
+        matrix.getValues(matrixValues);  //将matrix中的值复制到
+        return matrixValues[Matrix.MSCALE_X];
+    }
+
+    /**
+     * 获取y方向的缩放比
+     * 不可被继承
+     * @return
+     */
+    public final float getYScale(){
+        matrix.getValues(matrixValues);
+        return matrixValues[Matrix.MSCALE_Y];
+    }
 
     /**
      * View和Window绑定时就会调用这个函数，此时将会有一个Surface进行绘图之类的逻辑。
@@ -75,7 +154,7 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
      */
     @Override
     public void onGlobalLayout() {
-        if(isInitLayout) {
+        if(isInitLayout) {  //只有第一次时候才调用
             Drawable drawable = getDrawable();
             int viewWidth = getWidth();
             int viewHeight = getHeight();
@@ -112,21 +191,127 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
      *
      * @param dx  x方向移动位置
      * @param dy  y方向移动位置
-     * @param scaleX  x方向缩放尺寸
-     * @param scaleY  y方向缩放尺寸
+     * @param minScaleX  x方向缩放尺寸,该方法在此确定了图片的x方向的最小缩放比
+     * @param minScaleY  y方向缩放尺寸,该方法在此确定了图片的y方向的最小缩放比
      * @param px  x方向缩放位置
      * @param py  y方向缩放位置
      */
-    private void initView(float dx,float dy,float scaleX,float scaleY,float px,float py){
+    private void initView(float dx,float dy,float minScaleX,float minScaleY,float px,float py){
+        this.minXScale = minScaleX;
+        this.minYScale = minScaleY;
         matrix.postTranslate(dx,dy);  //平移,该方法表示,平移地同时立即响应绘制
-        matrix.postScale(scaleX,scaleY,px,py);
+        matrix.postScale(minXScale,minYScale,px,py);
+        initRectF.union(getCoordinate());
+        //Log.e(TAG,"initRectF.left="+initRectF.left+"\ninitRectF.top="+initRectF.top+"\ninitRectF.right="+initRectF.right+"\ninitRectF.bottom="+initRectF.bottom);
         setImageMatrix(matrix);
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+    public boolean onScale(ScaleGestureDetector detector) {
+        float xScale = getXScale();
+        float yScale = getYScale();
+        float scaleFactor = detector.getScaleFactor(); //当前图片和上一次缩放前做比较，比例，大于1，则扩大，小于1则缩小
+        if(scaleFactor == 1.0f)
+            return true;
+
+        float minScale = Math.min(minXScale/xScale,minYScale/yScale);
+        float maxScale = Math.max(SCALE_MAX/xScale,SCALE_MAX/yScale);
+        if(scaleFactor < minScale)
+            scaleFactor = minScale;
+        if(scaleFactor>maxScale)
+            scaleFactor = maxScale;
+        matrix.postScale(scaleFactor,scaleFactor,detector.getFocusX(),detector.getFocusY());
+        checkBorder();
+        setImageMatrix(matrix);
+
+        return true;
     }
+
+    @Override
+    public boolean onScaleBegin(ScaleGestureDetector detector) {
+        return true;
+    }
+
+    @Override
+    public void onScaleEnd(ScaleGestureDetector detector) {
+
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        mScaleGestureDetector.onTouchEvent(event);
+        //float xOldCenter = -1,yOldCenter = -1;  //用于记录多个触控点的中心坐标
+        float xNowCenter = -1,yNowCenter = -1;  //用于记录多个触控点的中心坐标
+        final int pointCount = event.getPointerCount();
+
+        for(int i=0;i<pointCount;++i){
+            xNowCenter += event.getX(i);
+            yNowCenter += event.getY(i);
+        }
+
+        xNowCenter = xNowCenter / pointCount;
+        yNowCenter = yNowCenter / pointCount;
+
+
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    xOldCenter = xNowCenter;
+                    yOldCenter = yNowCenter;
+                    //Log.e(TAG," xOldCenter="+xOldCenter);
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    float dx = xNowCenter - xOldCenter;
+                    float dy = yNowCenter - yOldCenter;
+                    matrix.postTranslate(dx,dy);  //先平移更新，数据
+                    //checkBorder();
+                    setImageMatrix(matrix);
+                    xOldCenter = xNowCenter;
+                    yOldCenter = yNowCenter;
+                    break;
+        }
+        return true;
+    }
+
+    /**
+     * 根据当前图片的Matrix获得图片尺寸信息
+     * 将矩阵应用到矩形
+     * 返回的矩形中，rect.left，rect.right,rect.top,rect.bottom分别就就是当前屏幕离你的图片的边界的距离
+     * @return
+     */
+    private RectF getCoordinate(){
+        RectF rectF = new RectF(); //存储坐标
+        Drawable drawable = getDrawable();
+        if(drawable!=null){
+            rectF.set(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+            matrix.mapRect(rectF); //原先矩阵matrix 缩放等等参数，将rectF的默认坐标转换为实际坐标
+        }
+        return rectF;
+    }
+
+    /**
+     * 避免缩放后，图片和view之间出现空白
+     * 检查边界问题
+     */
+    private void checkBorder() {
+        float deltaX = 0f;
+        float deltaY = 0f;
+        RectF rect = getCoordinate();
+
+        if (rect.left > initRectF.left)  //如果图像左上角当前横坐标x大于初始值
+            deltaX = -(rect.left-initRectF.left);
+
+        if (rect.top > initRectF.top)  //如果图像左上角当前纵坐标y大于初始值
+            deltaY = -(rect.top-initRectF.top);
+
+        if(rect.right< initRectF.right)  //如果图像右下角当前横坐标x小于初始值
+            deltaX = initRectF.right -rect.right;
+
+        if(rect.bottom<initRectF.bottom)   //如果图像右下角当前纵坐标y小于初始值
+            deltaY = initRectF.bottom - rect.bottom;
+
+        matrix.postTranslate(deltaX, deltaY);
+    }
+
 
     /**
      * 图片初始化时候，显示的模式，

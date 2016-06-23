@@ -262,11 +262,14 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
                 case MotionEvent.ACTION_MOVE:
                     float dx = xNowCenter - xOldCenter;
                     float dy = yNowCenter - yOldCenter;
-                    matrix.postTranslate(dx,dy);  //先平移更新，数据
-                    //checkBorder();
-                    setImageMatrix(matrix);
-                    xOldCenter = xNowCenter;
-                    yOldCenter = yNowCenter;
+                    if( Math.sqrt((dx * dx) + (dy * dy)) >= 10) {
+                        matrix.postTranslate(dx, dy);  //先平移更新，数据
+                        checkBorder();
+                        setImageMatrix(matrix);
+                    }
+                        xOldCenter = xNowCenter;
+                        yOldCenter = yNowCenter;
+
                     break;
         }
         return true;
@@ -297,17 +300,25 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
         float deltaY = 0f;
         RectF rect = getCoordinate();
 
-        if (rect.left > initRectF.left)  //如果图像左上角当前横坐标x大于初始值
-            deltaX = -(rect.left-initRectF.left);
+        if (rect.left > initRectF.left) {  //如果图像左上角当前横坐标x大于初始值
+            Log.e(TAG,"A");
+            deltaX = -(rect.left - initRectF.left);
+        }
 
-        if (rect.top > initRectF.top)  //如果图像左上角当前纵坐标y大于初始值
-            deltaY = -(rect.top-initRectF.top);
+        if (rect.top > initRectF.top) {  //如果图像左上角当前纵坐标y大于初始值
+            Log.e(TAG,"B");
+            deltaY = -(rect.top - initRectF.top);
+        }
 
-        if(rect.right< initRectF.right)  //如果图像右下角当前横坐标x小于初始值
-            deltaX = initRectF.right -rect.right;
+        if(rect.right< initRectF.right) {  //如果图像右下角当前横坐标x小于初始值
+            Log.e(TAG,"C");
+            deltaX = initRectF.right - rect.right;
+        }
 
-        if(rect.bottom<initRectF.bottom)   //如果图像右下角当前纵坐标y小于初始值
+        if(rect.bottom<initRectF.bottom) {   //如果图像右下角当前纵坐标y小于初始值
+            Log.e(TAG,"D");
             deltaY = initRectF.bottom - rect.bottom;
+        }
 
         matrix.postTranslate(deltaX, deltaY);
     }

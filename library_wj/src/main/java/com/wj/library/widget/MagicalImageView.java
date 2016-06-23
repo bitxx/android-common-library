@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -82,8 +83,7 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
     /**
      * 保存上一次平移前的焦点坐标点
      */
-    float xOldCenter = -1,yOldCenter = -1;
-
+    private float xOldCenter = -1,yOldCenter = -1;
 
     public MagicalImageView(Context context) {
         super(context,null);
@@ -229,18 +229,18 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
 
     @Override
     public boolean onScaleBegin(ScaleGestureDetector detector) {
+        Log.e(TAG,"缩放开始");
         return true;
     }
 
     @Override
     public void onScaleEnd(ScaleGestureDetector detector) {
-
+        Log.e(TAG,"缩放结束");
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         mScaleGestureDetector.onTouchEvent(event);
-        //float xOldCenter = -1,yOldCenter = -1;  //用于记录多个触控点的中心坐标
         float xNowCenter = -1,yNowCenter = -1;  //用于记录多个触控点的中心坐标
         final int pointCount = event.getPointerCount();
 
@@ -252,25 +252,31 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
         xNowCenter = xNowCenter / pointCount;
         yNowCenter = yNowCenter / pointCount;
 
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                xOldCenter = xNowCenter;
+                yOldCenter = xNowCenter;
+                break;
+            case MotionEvent.ACTION_MOVE:
+                float dx = xNowCenter - xOldCenter;
+                float dy = yNowCenter - yOldCenter;
 
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    xOldCenter = xNowCenter;
-                    yOldCenter = yNowCenter;
-                    //Log.e(TAG," xOldCenter="+xOldCenter);
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    float dx = xNowCenter - xOldCenter;
-                    float dy = yNowCenter - yOldCenter;
-                    if( Math.sqrt((dx * dx) + (dy * dy)) >= 10) {
-                        matrix.postTranslate(dx, dy);  //先平移更新，数据
-                        checkBorder();
-                        setImageMatrix(matrix);
-                    }
-                        xOldCenter = xNowCenter;
-                        yOldCenter = yNowCenter;
-
-                    break;
+                /**
+                 * 是否正在缩放操作
+                 * 通过此判断，可以减少滑动和缩放手势的冲突，尽量避免缩放时候，响应了滑动
+                 * 目前并没有完美处理了该问题，图片缩放时候，仍旧有几率触动图片跳动，这就是缩放时候触动了滑动的缘故
+                 * 若有更好的方式，请与作者共享下？ ^_^
+                 *
+                 */
+                if( Math.sqrt((dx * dx) + (dy * dy)) >= 10 && mScaleGestureDetector.isInProgress() == false) {
+                    Log.e(TAG,"hello");
+                    matrix.postTranslate(dx, dy);  //先平移更新，数据
+                    checkBorder();
+                    setImageMatrix(matrix);
+                }
+                xOldCenter = xNowCenter;
+                yOldCenter = yNowCenter;
+                break;
         }
         return true;
     }
@@ -295,34 +301,26 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
      * 避免缩放后，图片和view之间出现空白
      * 检查边界问题
      */
-    private void checkBorder() {
+    private synchronized void checkBorder() {
         float deltaX = 0f;
         float deltaY = 0f;
         RectF rect = getCoordinate();
 
-        if (rect.left > initRectF.left) {  //如果图像左上角当前横坐标x大于初始值
-            Log.e(TAG,"A");
+        if (rect.left > initRectF.left)   //如果图像左上角当前横坐标x大于初始值
             deltaX = -(rect.left - initRectF.left);
-        }
 
-        if (rect.top > initRectF.top) {  //如果图像左上角当前纵坐标y大于初始值
-            Log.e(TAG,"B");
+        if (rect.top > initRectF.top)   //如果图像左上角当前纵坐标y大于初始值
             deltaY = -(rect.top - initRectF.top);
-        }
 
-        if(rect.right< initRectF.right) {  //如果图像右下角当前横坐标x小于初始值
-            Log.e(TAG,"C");
+        if(rect.right< initRectF.right)   //如果图像右下角当前横坐标x小于初始值
             deltaX = initRectF.right - rect.right;
-        }
 
-        if(rect.bottom<initRectF.bottom) {   //如果图像右下角当前纵坐标y小于初始值
-            Log.e(TAG,"D");
+        if(rect.bottom<initRectF.bottom)    //如果图像右下角当前纵坐标y小于初始值
             deltaY = initRectF.bottom - rect.bottom;
-        }
 
-        matrix.postTranslate(deltaX, deltaY);
+        if(deltaX!=0||deltaY!=0)
+            matrix.postTranslate(deltaX, deltaY);
     }
-
 
     /**
      * 图片初始化时候，显示的模式，

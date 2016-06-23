@@ -1,12 +1,10 @@
 package com.wj.library.widget;
 
 import android.content.Context;
-import android.gesture.Gesture;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -219,7 +217,6 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
         matrix.postTranslate(dx,dy);  //平移,该方法表示,平移地同时立即响应绘制
         matrix.postScale(minXScale,minYScale,px,py);
         initRectF.union(getCoordinate());
-        //Log.e(TAG,"initRectF.left="+initRectF.left+"\ninitRectF.top="+initRectF.top+"\ninitRectF.right="+initRectF.right+"\ninitRectF.bottom="+initRectF.bottom);
         setImageMatrix(matrix);
     }
 

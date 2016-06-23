@@ -1,12 +1,13 @@
 package com.wj.library.widget;
 
 import android.content.Context;
+import android.gesture.Gesture;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -31,7 +32,7 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
     /**
      * 图片的最大缩放比
      */
-    private float SCALE_MAX = 8f;
+    private float SCALE_MAX = 4f;
 
     /**
      * 图片显示方式，默认Type.FIT_CENTER
@@ -42,11 +43,6 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
      * 是否需要重新布局
      */
     private boolean isInitLayout = true;
-
-    /**
-     * 当前手势缩放尺寸,默认为1.0f。不能和初始化时候地缩放比混合,该缩放是以视图初始化结束后地展示为基础
-     */
-    private float scale = 1.0f;
 
     /**
      * 图像操作地矩阵,3x3的
@@ -81,9 +77,29 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
     private ScaleGestureDetector mScaleGestureDetector;
 
     /**
+     * 用于检测双击事件
+     */
+    private GestureDetector gestureDetector;
+
+    /**
      * 保存上一次平移前的焦点坐标点
      */
     private float xOldCenter = -1,yOldCenter = -1;
+
+    /**
+     * 保存平移后当前焦点坐标点
+     */
+    private float xNowCenter = -1,yNowCenter = -1;
+
+    /**
+     * 上一次滑动时候,触控点个数
+     */
+    private int oldPointCount = 0;
+
+    /**
+     * 此次滑动,触控点个数
+     */
+    private int nowPointCount = 0;
 
     public MagicalImageView(Context context) {
         super(context,null);
@@ -93,6 +109,7 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
         super(context, attrs);
         super.setScaleType(ScaleType.MATRIX);  //自定义展示,这样一来,用户无论设置别的类型地,都无效
         mScaleGestureDetector = new ScaleGestureDetector(context,this);
+        gestureDetector = new GestureDetector(context,new SimpleOnMyGestureListener());
         setOnTouchListener(this);
     }
 
@@ -229,53 +246,57 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
 
     @Override
     public boolean onScaleBegin(ScaleGestureDetector detector) {
-        Log.e(TAG,"缩放开始");
         return true;
     }
 
     @Override
     public void onScaleEnd(ScaleGestureDetector detector) {
-        Log.e(TAG,"缩放结束");
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        mScaleGestureDetector.onTouchEvent(event);
-        float xNowCenter = -1,yNowCenter = -1;  //用于记录多个触控点的中心坐标
-        final int pointCount = event.getPointerCount();
+        if (gestureDetector.onTouchEvent(event))
+            return true;
 
-        for(int i=0;i<pointCount;++i){
-            xNowCenter += event.getX(i);
-            yNowCenter += event.getY(i);
+        mScaleGestureDetector.onTouchEvent(event);
+
+        nowPointCount = event.getPointerCount();
+        xNowCenter = (event.getX(0)+event.getX(nowPointCount-1))/2;
+        yNowCenter = (event.getY(0)+event.getY(nowPointCount-1))/2;
+
+        /**
+         * 此处使用新旧触控点数量做比较是因为:
+         * 1.屏幕无法每次都精确地判断出触控点数,尤其在up阶段,很容易感应错误
+         * 2.在up阶段,触控点数地不确定,会导致dx、dy出现异常,从而造成图像地跳跃显示
+         * 3.通过触控点数地变化来判断,若发生变化,则将新旧坐标点置为相同,这样就不会发生图像跳跃地现象
+         * 4.在Up后,将旧的触控点数设置为0,因为这些变量都是全局变量,若不恢复,极易造成下次滑动地异常现象
+         */
+        if(oldPointCount!=nowPointCount){
+            xOldCenter = xNowCenter;
+            yOldCenter = yNowCenter;
+            oldPointCount = nowPointCount;
         }
 
-        xNowCenter = xNowCenter / pointCount;
-        yNowCenter = yNowCenter / pointCount;
-
-        switch (event.getAction()) {
+        switch (event.getAction()& MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
-                xOldCenter = xNowCenter;
-                yOldCenter = xNowCenter;
                 break;
             case MotionEvent.ACTION_MOVE:
+
                 float dx = xNowCenter - xOldCenter;
                 float dy = yNowCenter - yOldCenter;
 
-                /**
-                 * 是否正在缩放操作
-                 * 通过此判断，可以减少滑动和缩放手势的冲突，尽量避免缩放时候，响应了滑动
-                 * 目前并没有完美处理了该问题，图片缩放时候，仍旧有几率触动图片跳动，这就是缩放时候触动了滑动的缘故
-                 * 若有更好的方式，请与作者共享下？ ^_^
-                 *
-                 */
-                if( Math.sqrt((dx * dx) + (dy * dy)) >= 10 && mScaleGestureDetector.isInProgress() == false) {
-                    Log.e(TAG,"hello");
+                if( Math.sqrt((dx * dx) + (dy * dy)) >= 10 ) {
                     matrix.postTranslate(dx, dy);  //先平移更新，数据
                     checkBorder();
                     setImageMatrix(matrix);
                 }
                 xOldCenter = xNowCenter;
                 yOldCenter = yNowCenter;
+                break;
+            case MotionEvent.ACTION_POINTER_UP:
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                oldPointCount = 0;  //回归默认
                 break;
         }
         return true;
@@ -357,6 +378,30 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
             this.type = type;
         }
         final int type;
+    }
+
+    private class SimpleOnMyGestureListener extends GestureDetector.SimpleOnGestureListener{
+        public SimpleOnMyGestureListener(){
+
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            float xScale = getXScale();
+            float yScale = getYScale();
+            float scale = Math.max(xScale,yScale);
+            if(scale<SCALE_MAX){
+                /*float scaleNew = 1;
+                if(scaleNew>SCALE_MAX)
+                    scaleNew = SCALE_MAX;
+                matrix.postScale(scaleNew,scaleNew,e.getX(),e.getY());
+                checkBorder();
+                setImageMatrix(matrix);*/
+
+            }
+
+            return true;
+        }
     }
 
 }

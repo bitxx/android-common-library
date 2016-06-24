@@ -30,7 +30,7 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
     /**
      * 图片的最大缩放比
      */
-    private float SCALE_MAX = 4f;
+    private float SCALE_MAX = 1f;
 
     /**
      * 图片显示方式，默认Type.FIT_CENTER
@@ -341,6 +341,14 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
     }
 
     /**
+     * 获取最小缩放比
+     * @return
+     */
+    private float getMinScale(){
+        return Math.min(minXScale,minXScale);
+    }
+
+    /**
      * 图片初始化时候，显示的模式，
      * 由于重写了ImageView缘故，原先的ScaleType不能使用，需要在此使用setType()方法
      */
@@ -387,18 +395,18 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
             float xScale = getXScale();
             float yScale = getYScale();
             float scale = Math.max(xScale,yScale);
-            if(scale<SCALE_MAX){
-                /*float scaleNew = 1;
-                if(scaleNew>SCALE_MAX)
-                    scaleNew = SCALE_MAX;
-                matrix.postScale(scaleNew,scaleNew,e.getX(),e.getY());
-                checkBorder();
-                setImageMatrix(matrix);*/
+            float scaleNew = 0;
+            if(scale<SCALE_MAX)
+                scaleNew = SCALE_MAX/scale;
 
-            }
+            if(scale>=SCALE_MAX)
+                scaleNew = getMinScale()/scale;
+
+            matrix.postScale(scaleNew,scaleNew,e.getX(),e.getY());
+            checkBorder();
+            setImageMatrix(matrix);
 
             return true;
         }
     }
-
 }

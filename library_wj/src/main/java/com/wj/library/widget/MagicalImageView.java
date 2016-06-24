@@ -4,7 +4,10 @@ import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -31,6 +34,8 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
      * 图片的最大缩放比
      */
     private float SCALE_MAX = 1f;
+
+    private static float SCALE_MIN = 1f; //需要根据初始化情况获取
 
     /**
      * 图片显示方式，默认Type.FIT_CENTER
@@ -124,7 +129,7 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
     }
 
     /**
-     * 获取x方向的缩放比
+     * 获取x方向当前与初始时候相对的缩放比
      * 不可被继承
      * @return
      */
@@ -134,7 +139,7 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
     }
 
     /**
-     * 获取y方向的缩放比
+     * 获取y方向当前与初始时候相对的缩放比
      * 不可被继承
      * @return
      */
@@ -214,6 +219,7 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
     private void initView(float dx,float dy,float minScaleX,float minScaleY,float px,float py){
         this.minXScale = minScaleX;
         this.minYScale = minScaleY;
+        SCALE_MIN = getMinScale();
         matrix.postTranslate(dx,dy);  //平移,该方法表示,平移地同时立即响应绘制
         matrix.postScale(minXScale,minYScale,px,py);
         initRectF.union(getCoordinate());
@@ -222,9 +228,9 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
 
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
-        float xScale = getXScale();
+        float xScale = getXScale();  //相对于初始的缩放比
         float yScale = getYScale();
-        float scaleFactor = detector.getScaleFactor(); //当前图片和上一次缩放前做比较，比例，大于1，则扩大，小于1则缩小
+        float scaleFactor = detector.getScaleFactor(); //当前图片和上一次缩放前做比较，比例，大于1，则扩大，小于1则缩小 //与上次事件相比，得到的比例因子
         if(scaleFactor == 1.0f)
             return true;
 
@@ -386,25 +392,61 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
     }
 
     private class SimpleOnMyGestureListener extends GestureDetector.SimpleOnGestureListener{
-        public SimpleOnMyGestureListener(){
-
-        }
+        private boolean isScale = true;
+        private float scale = 1f;
 
         @Override
-        public boolean onDoubleTap(MotionEvent e) {
-            float xScale = getXScale();
-            float yScale = getYScale();
-            float scale = Math.max(xScale,yScale);
-            float scaleNew = 0;
-            if(scale<SCALE_MAX)
-                scaleNew = SCALE_MAX/scale;
+        public boolean onDoubleTap(final MotionEvent e) {
+            final float x = e.getX();
+            final float y = e.getY();
+            final float initScal =  Math.max(getXScale(),getYScale());
+            scale = initScal;
 
-            if(scale>=SCALE_MAX)
-                scaleNew = getMinScale()/scale;
 
-            matrix.postScale(scaleNew,scaleNew,e.getX(),e.getY());
-            checkBorder();
-            setImageMatrix(matrix);
+
+            MagicalImageView.this.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    postDelayed(this,15);
+
+                    /*if(initScal<SCALE_MAX) {   //当前状态地缩放小于最大缩放,准备放大
+                        isScale = true;
+                        if(scale<SCALE_MAX) {
+                            scale = Math.max(getXScale(),getYScale());
+                            matrix.postScale(1.1f, 1.1f, x, y);
+                            checkBorder();
+                            setImageMatrix(matrix);
+                        }
+                    }*/
+
+
+                    if(initScal>=SCALE_MAX){  //当前状态地缩放不小于最大缩放,准备放大
+                        isScale = true;
+                        if(scale>SCALE_MIN){
+                            scale = Math.min(getXScale(),getYScale());
+                            matrix.postScale(0.9f, 0.9f, x, y);
+                            checkBorder();
+                            setImageMatrix(matrix);
+                        }
+                    }
+
+                    if((initScal<SCALE_MAX && scale>=SCALE_MAX)||(initScal>=SCALE_MAX && scale<=SCALE_MIN))
+                    {
+                        isScale = false;
+                    }
+
+
+
+
+                    /*else
+                        matrix.postScale(0.9f,0.9f,x,y);
+*/
+
+
+
+
+                }
+            },15);
 
             return true;
         }

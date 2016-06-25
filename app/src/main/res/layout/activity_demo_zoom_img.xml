@@ -11,7 +11,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <com.wj.library.widget.MagicalImageView
+    <com.wj.library.widget.GestureImageView
         android:id="@+id/miv_img"
         android:layout_gravity="center"
         android:layout_width="match_parent"

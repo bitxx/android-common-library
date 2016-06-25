@@ -22,10 +22,10 @@ import android.widget.ImageView;
  * Created by wuj on 2016/6/20.
  *
  */
-public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGlobalLayoutListener
+public class GestureImageView extends ImageView implements ViewTreeObserver.OnGlobalLayoutListener
         ,ScaleGestureDetector.OnScaleGestureListener
         ,View.OnTouchListener {
-    private static final String TAG = MagicalImageView.class.getSimpleName();
+    private static final String TAG = GestureImageView.class.getSimpleName();
 
     /**
      * 图片的最大缩放比
@@ -101,11 +101,11 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
      */
     private int nowPointCount = 0;
 
-    public MagicalImageView(Context context) {
+    public GestureImageView(Context context) {
         super(context,null);
     }
 
-    public MagicalImageView(Context context, AttributeSet attrs) {
+    public GestureImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         super.setScaleType(ScaleType.MATRIX);  //自定义展示,这样一来,用户无论设置别的类型地,都无效
         mScaleGestureDetector = new ScaleGestureDetector(context,this);
@@ -113,7 +113,7 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
         setOnTouchListener(this);
     }
 
-    public MagicalImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public GestureImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -123,6 +123,7 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
      */
     public void setType(Type type){
         this.type = type;
+        invalidate();
     }
 
     /**
@@ -231,7 +232,10 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
         if(scaleFactor == 1.0f)
             return true;
 
-        float minScale = Math.min(minXScale/xScale,minYScale/yScale);  //有的图片展示类型并不是原始图等比缩放,因此此处需要用Math判断
+        /**
+         * 有的图片展示类型并不是原始图等比缩放,因此此处需要用Math判断
+         */
+        float minScale = Math.min(minXScale/xScale,minYScale/yScale);  //距离最小缩放比,还需要缩小多少比例
         float maxScale = Math.max(SCALE_MAX/xScale,SCALE_MAX/yScale);
         if(scaleFactor < minScale)
             scaleFactor = minScale;
@@ -398,7 +402,7 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
             final float initScal =  Math.max(getXScale(),getYScale());  //记录双击前最大地缩放比,用于判断双击时,是要放大还是缩小
             scale = initScal;  //记录双击后,计时器时间内,当前地缩放比
 
-            MagicalImageView.this.postDelayed(new Runnable() {
+            GestureImageView.this.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     postDelayed(this,15);   //定时器,15毫秒运行一次

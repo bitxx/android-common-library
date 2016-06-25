@@ -14,6 +14,9 @@ import android.widget.ImageView;
 
 
 /**
+ * 注释都比较详细,如有不清楚地方,可以联系作者:
+ * https://github.com/jason-wj/android-common-library
+ *
  * 该imageview目前支持功能：
  * 手势缩放
  * 放大后平移

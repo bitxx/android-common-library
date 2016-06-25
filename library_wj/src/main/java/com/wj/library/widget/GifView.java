@@ -4,9 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Movie;
+import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 /**
@@ -72,9 +75,7 @@ public class GifView extends ImageView {
             movie = Movie.decodeStream(getResources().openRawResource(srcId));
             if (movie != null)
                 duration = movie.duration();//获取gif持续时间
-            //Log.e(TAG,duration+"");
         }
-
     }
 
     @Override
@@ -97,8 +98,10 @@ public class GifView extends ImageView {
                     drawFrame(canvas);
                     invalidateView(); //清空当前画面
                 }
-            }else
+            }else {
+                setPaused(true); //播放结束,则暂停
                 finishListener.finish();
+            }
         } else
             drawFrame(canvas);
     }
@@ -112,7 +115,7 @@ public class GifView extends ImageView {
         movie.setTime(nowRealTime);
         canvas.save(Canvas.MATRIX_SAVE_FLAG);
         canvas.restore();
-        movie.draw(canvas, 0, 0);
+        movie.draw(canvas, (getWidth()-movie.width())/2, (getHeight()-movie.height())/2);
     }
 
     /**

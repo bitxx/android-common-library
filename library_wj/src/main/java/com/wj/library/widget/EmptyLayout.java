@@ -16,7 +16,9 @@ import android.widget.TextView;
 
 import com.wj.library.R;
 
-
+/**
+ * 该组件很常用,也很容易实现,这是从OSC中抽出来的,供自己需要地时候使用
+ */
 public class EmptyLayout extends LinearLayout implements OnClickListener {
     private Context context;
     private ImageView img;

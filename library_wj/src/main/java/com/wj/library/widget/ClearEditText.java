@@ -15,6 +15,9 @@ import android.widget.AutoCompleteTextView;
 import com.wj.library.R;
 
 
+/**
+ * 该组件很常用,也很容易实现,这只是简易版的,后期若有需要,再进一步完善
+ */
 public class ClearEditText extends AutoCompleteTextView implements View.OnFocusChangeListener,TextWatcher {
     /**
      * 删除按钮的引用

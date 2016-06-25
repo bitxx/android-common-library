@@ -30,7 +30,7 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
     /**
      * 图片的最大缩放比
      */
-    private float SCALE_MAX = 1f;
+    private float SCALE_MAX = 3f;
 
     private static float SCALE_MIN = 1f; //需要根据初始化情况获取
 
@@ -407,12 +407,12 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
                      * 当前状态地缩放小于最大缩放,准备放大
                      */
                     if(initScal<SCALE_MAX&&scale<SCALE_MAX) {
+                        matrix.postScale(1.1f, 1.1f, x, y);  //先缩放,后检测
                         scale = Math.max(getXScale(),getYScale());
                         if(scale<SCALE_MIN) {
                             float maxScale = Math.max(SCALE_MAX/getXScale(),SCALE_MAX/getYScale());
                             matrix.postScale(maxScale,maxScale,x,y);
-                        }else
-                            matrix.postScale(1.1f, 1.1f, x, y);
+                        }
                         checkBorder();
                         setImageMatrix(matrix);
                     }
@@ -421,13 +421,12 @@ public class MagicalImageView extends ImageView implements ViewTreeObserver.OnGl
                      * 当前状态地缩放不小于最大缩放,准备放大
                      */
                     if(initScal>=SCALE_MAX&&scale>SCALE_MIN){
+                        matrix.postScale(0.9f, 0.9f, x, y);  //先缩放,后检查,避免缩放到临界时候,出现空白
                         scale = Math.min(getXScale(),getYScale());
-
                         if(scale<SCALE_MIN) {
                             float minScale = Math.min(minXScale/getXScale(),minYScale/getYScale());
                             matrix.postScale(minScale,minScale,x,y);
-                        }else
-                            matrix.postScale(0.9f, 0.9f, x, y);
+                        }
                         checkBorder();
                         setImageMatrix(matrix);
                     }

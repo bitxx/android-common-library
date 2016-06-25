@@ -15,7 +15,7 @@ import android.widget.ImageView;
 /**
  * version 1.0
  * <p/>
- * Created by wuj on 2016/6/7.
+ * Created by wuj on 2016/6/7
  * 实现gif动画
  * 已经关闭硬件加速，增强兼容性
  *

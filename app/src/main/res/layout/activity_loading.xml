@@ -4,11 +4,15 @@
     android:orientation="vertical">
 
 
-    <TextView
+    <com.wj.library.widget.GifView
+        android:foregroundGravity="center"
+        android:id="@+id/gif_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@null"
         android:layout_centerInParent="true"
-        android:text="~Hello World~" />
+        android:src="@mipmap/loading"
+         />
 
 
 </RelativeLayout>

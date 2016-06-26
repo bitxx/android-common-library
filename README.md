@@ -6,7 +6,7 @@
 <img src="https://github.com/jason-wj/android-common-library/blob/master/image/demo.png" type="image/png" style="height:auto;" width="255"/>
 
 ##2016年06月26日更新
-###新增:EmptyLayout以及ClearEditText(GestureImageView)：
+###新增:EmptyLayout以及ClearEditText：
 <span>
     <div><br/></div>
     <div>

@@ -81,7 +81,10 @@ public class GifView extends ImageView {
     @Override
     protected void onDraw(Canvas canvas) {
         /**此处不需要去继承ImageView父类的onDraw()方法，否则绘制会有异常*/
-        drawGif(canvas);
+        if(movie!=null)
+            drawGif(canvas);
+        else
+            super.onDraw(canvas);
     }
 
     private void drawGif(Canvas canvas) {
@@ -146,7 +149,7 @@ public class GifView extends ImageView {
      */
     public void setPaused(boolean paused) {
         isPaused = paused;
-        if (!paused) {
+        if (!paused&&movie!=null) {
             perTime = android.os.SystemClock.uptimeMillis() - nowRealTime; //当前时间距离上次暂停帧时候
         }
         invalidateView();
@@ -156,8 +159,10 @@ public class GifView extends ImageView {
      * 重置动画
      */
     public void restart() {
-        perTime = 0;
-        invalidateView();
+        if(movie!=null) {
+            perTime = 0;
+            invalidateView();
+        }
     }
 
     /**

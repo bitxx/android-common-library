@@ -7,110 +7,86 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.CycleInterpolator;
-import android.view.animation.TranslateAnimation;
 import android.widget.AutoCompleteTextView;
-
 import com.wj.library.R;
 
-
 /**
- * 该组件很常用,也很容易实现,这只是简易版的,后期若有需要,再进一步完善
+ * 可以清空的EditText
+ * 该组件是网上很流行的一种通用的实现方式，很简单，该组件是很久前从SCDN上照的，代码没有怎么改变，后期若有需要，可根据具体情况修改
+ * 之所以继承AutoCompleteTextView，是因为，很多情况下，输入的内容都要考虑到历史记录
+ *
+ * 主要是利用了TextView右侧的drawable来实现的，因此，可以自定义导入一个清空的图标到右侧
+ *
+ * Created by wuj on 2016/6/26.
  */
-public class ClearEditText extends AutoCompleteTextView implements View.OnFocusChangeListener,TextWatcher {
-    /**
-     * 删除按钮的引用
-     */
-    private Drawable mClearDrawable;
-    private boolean hasFoucs;
+public class ClearEditText extends AutoCompleteTextView implements TextWatcher,View.OnFocusChangeListener{
+
+    private Drawable drawable;  //清空按钮的图片资源，因为是继承自AutoCompleteTextView，需要获取其右侧的图片资源
 
     public ClearEditText(Context context) {
         this(context, null);
     }
+
     public ClearEditText(Context context, AttributeSet attrs) {
-        // 这里构造方法也很重要，不加这个很多属性不能再XML里面定义
         this(context, attrs, android.R.attr.editTextStyle);
     }
 
-    public ClearEditText(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        init();
+    public ClearEditText(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initView();
     }
-    private void init() {
-        // 获取EditText的DrawableRight,假如没有设置我们就使用默认的图片,2是获得右边的图片  顺序是左上右下（0,1,2,3,）
-        mClearDrawable = getCompoundDrawables()[2];
-        if (mClearDrawable == null) {
-            // throw new
-            // NullPointerException("You can add drawableRight attribute in XML");
-            mClearDrawable = getResources().getDrawable(R.mipmap.et_clear);
-        }
-        mClearDrawable.setBounds(0, 0, mClearDrawable.getIntrinsicWidth(),mClearDrawable.getIntrinsicHeight());
-        // 默认设置隐藏图标
-        setClearIconVisible(false);
-        // 设置焦点改变的监听
+
+    private void initView(){
+        drawable = getCompoundDrawables()[2];  //获取右侧的图片资源
+        if(drawable == null)
+            drawable = getResources().getDrawable(R.mipmap.et_clear);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),drawable.getIntrinsicHeight());
+        setDrawVisible(false);
         setOnFocusChangeListener(this);
-        // 设置输入框里面内容发生改变的监听
         addTextChangedListener(this);
     }
 
-    /**
-     * 因为我们不能直接给EditText设置点击事件，所以我们用记住我们按下的位置来模拟点击事件 当我们按下的位置 在 EditText的宽度 -
-     * 图标到控件右边的间距 - 图标的宽度 和 EditText的宽度 - 图标到控件右边的间距之间我们就算点击了图标，竖直方向就没有考虑
-     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            if (getCompoundDrawables()[2] != null) {
-                boolean touchable = event.getX() > (getWidth() - getTotalPaddingRight())&& (event.getX() < ((getWidth() - getPaddingRight())));
-                if (touchable) {
-                    this.setText("");
-                }
-            }
+        switch (event.getAction()){
+            case MotionEvent.ACTION_UP:
+                    if(drawable!=null){
+                        //点击范围在清空图标附近时候，才可以响应清空
+                        boolean isClear = event.getX() > (getWidth() - getTotalPaddingRight())&& (event.getX() < ((getWidth() - getPaddingRight())));
+                        if(isClear)
+                            setText("");
+                    }
+                break;
         }
         return super.onTouchEvent(event);
     }
 
-    /**
-     * 当ClearEditText焦点发生变化的时候，判断里面字符串长度设置清除图标的显示与隐藏
-     */
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-        this.hasFoucs = hasFocus;
-        if (hasFocus) {
-            setClearIconVisible(getText().length() > 0);
-        } else {
-            setClearIconVisible(false);
-        }
-    }
-
-    /**
-     * 设置清除图标的显示与隐藏，调用setCompoundDrawables为EditText绘制上去
-     *
-     * @param visible
-     */
-    protected void setClearIconVisible(boolean visible) {
-        Drawable right = visible ? mClearDrawable : null;
-        setCompoundDrawables(getCompoundDrawables()[0],getCompoundDrawables()[1], right, getCompoundDrawables()[3]);
-    }
-
-    /**
-     * 当输入框里面内容发生变化的时候回调的方法
-     */
-    @Override
-    public void onTextChanged(CharSequence s, int start, int count, int after) {
-        if (hasFoucs) {
-            setClearIconVisible(s.length() > 0);
-        }
+    private void setDrawVisible(boolean visible) {
+        Drawable right = visible ? drawable : null;
+        setCompoundDrawables(getCompoundDrawables()[0],getCompoundDrawables()[1], right, getCompoundDrawables()[3]);  //保证原先已有图标不变
     }
 
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count,int after) {
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
     }
 
     @Override
     public void afterTextChanged(Editable s) {
 
+    }
+
+    @Override
+    public void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
+        super.onTextChanged(text, start, lengthBefore, lengthAfter);
+            setDrawVisible(text.length() > 0);
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if(hasFocus)
+            setDrawVisible(getText().length() > 0);
+        else
+            setDrawVisible(false);
     }
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/total_layout">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/toolbar_common_1" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <com.wj.library.widget.ClearEditText
+        android:layout_centerInParent="true"
+        android:hint="请输入内容"
+        android:id="@+id/cet_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="20dp" />
+</RelativeLayout>

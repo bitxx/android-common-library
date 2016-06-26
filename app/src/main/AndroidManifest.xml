@@ -34,6 +34,8 @@
         <activity android:name=".ui.activity.DemoChangeProtraitActivity" />
         <activity android:name=".ui.activity.DemoGifViewActivity" />
         <activity android:name=".ui.activity.DemoZoomImageActivity" />
+        <activity android:name=".ui.activity.DemoEmptyLayoutActivity"/>
+        <activity android:name=".ui.activity.DemoClearEdittextActivity"/>
     </application>
 
 </manifest>

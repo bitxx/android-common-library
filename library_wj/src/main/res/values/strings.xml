@@ -11,11 +11,4 @@
     <!--头像操作-->
     <string name="select_profile">选择头像</string>
     <string name="drawer_can_not_save_protrait">头像本地保存失败，请检查SD卡</string>
-
-    <!--自定义组件EmptyLayout-->
-    <string name="empty_no_login">没有登录</string>
-    <string name="empty_no_date_click">没有任何内容</string>
-    <string name="empty_no_date">加载中</string>
-    <string name="empty_click">请点击重试</string>
-    <string name="empty_err">程序异常,请重新启动</string>
 </resources>

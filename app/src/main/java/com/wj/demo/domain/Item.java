@@ -1,15 +1,16 @@
 package com.wj.demo.domain;
 
-import android.support.v7.app.AppCompatActivity;
-
 import com.wj.library.domain.Entity;
 
 /**
+ * 主界面列表model
  * Created by wuj on 2016/6/1.
  */
 public class Item extends Entity {
     private String name;
-    private Class activity;
+    private String state;  //是否已经实现
+    private Class activity;  //跳转到哪个界面
+
 
     public Class getActivity() {
         return activity;
@@ -25,5 +26,13 @@ public class Item extends Entity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

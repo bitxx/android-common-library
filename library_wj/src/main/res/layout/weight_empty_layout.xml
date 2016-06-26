@@ -6,7 +6,7 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="fill_parent">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -24,8 +24,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scaleType="centerInside"
-                    android:background="@mipmap/page_icon_empty"
-
                     android:visibility="gone" />
 
                 <ProgressBar
@@ -44,7 +42,6 @@
                 android:layout_marginTop="10.0dip"
                 android:gravity="center"
                 android:lines="2"
-                android:text="@string/empty_no_date"
                 android:textColor="@color/gray"
                 android:textSize="16sp" />
         </LinearLayout>

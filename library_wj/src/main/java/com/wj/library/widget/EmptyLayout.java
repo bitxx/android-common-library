@@ -1,13 +1,8 @@
-/**
- * 自行重写，空内容时候状态
- */
 package com.wj.library.widget;
-
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -16,207 +11,139 @@ import android.widget.TextView;
 
 import com.wj.library.R;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * 该组件很常用,也很容易实现,这是从OSC中抽出来后,进一步加工为自己需要的,供自己需要地时候使用
+ * 很常用的一个组件，当界面展示为空，需要一个有好的界面展示，此时，由EmptyLayout来统一管理，是非常不错的选择
+ *
+ * 需要注意，这个layout是一个通用的，仅仅能满足一般需求，剩下的需要自己根据需要完善了。毕竟不同项目，这个变化比较大
+ * Created by wuj on 2016/6/26.
  */
-public class EmptyLayout extends LinearLayout implements OnClickListener {
-    private Context context;
+public class EmptyLayout extends LinearLayout implements View.OnClickListener
+{
+
+    public static final int ERROR = 1;  //各种原因造成的显示失败
+    public static final int LOADING = 2; //加载中
+    public static final int GONE = 3; //除去EmptyLaout
+    public static final int NODATA = 4; //没有数据
+
+    private static final Map msg = new HashMap(){
+        {
+            put(ERROR,"加载失败，请重试");
+            put(LOADING,"加载中");
+            put(GONE,"隐藏");
+            put(NODATA,"没有内容");
+        }
+    };
+
+    private boolean isClick = false;  //该emptyLayout是否允许点击事件
+    private int nowType = LOADING;   //默认类型
+    private View.OnClickListener listener;
+
     private ImageView img;
     private TextView tv;
-    private RelativeLayout rlEmpty;
     private ProgressBar animProgressBar;
-    private boolean clickEnable = true;  //是否可点击
-    private OnClickListener listener;
-    private int errorState;
-    private String strNoDataContent = "";
-
-    public static final int HIDE_LAYOUT = 4;
-    public static final int NETWORK_ERROR = 1;
-    public static final int NETWORK_LOADING = 2;
-    public static final int NODATA = 3;
-    public static final int NODATA_ENABLE_CLICK = 5;
-    public static final int NO_LOGIN = 6;
-    public static final int COMMON_ERROR = 7; //通用错误
 
     public EmptyLayout(Context context) {
         super(context);
-        init();
+        initView(context);
     }
 
     public EmptyLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.context = context;
-        init();
+        initView(context);
     }
 
-    private void init() {
-        View view = View.inflate(context, R.layout.weight_empty_layout, null);
-        img = (ImageView) view.findViewById(R.id.img_error_layout);
-        tv = (TextView) view.findViewById(R.id.tv_error_layout);
-        rlEmpty = (RelativeLayout) view.findViewById(R.id.rl_empty);
-        animProgressBar = (ProgressBar) view.findViewById(R.id.animProgress);
-        setOnClickListener(this);
-        img.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (clickEnable) {
-                    if (listener != null)
-                        listener.onClick(v);
-                }
-            }
-        });
-        addView(view);
+    public EmptyLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initView(context);
     }
 
-    public void dismiss() {
-        errorState = HIDE_LAYOUT;
-        setVisibility(View.GONE);
-    }
-
-    public int getErrorState() {
-        return errorState;
-    }
-
-    public boolean isLoadError() {
-        return errorState == NETWORK_ERROR;
-    }
-
-    public boolean isLoading() {
-        return errorState == NETWORK_LOADING;
-    }
 
     @Override
     public void onClick(View v) {
-        if (clickEnable) {
-
-            if (listener != null)
-                listener.onClick(v);
-        }
-    }
-
-    public void setErrorMessage(String msg) {
-        tv.setText(msg);
-    }
-
-    public void setErrorImage(int imgResource) {
-        try {
-            img.setImageResource(imgResource);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setErrorType(int i) {
-        setVisibility(View.VISIBLE);
-        switch (i) {
-            case NETWORK_ERROR:
-                errorState = NETWORK_ERROR;
-                img.setBackgroundResource(R.mipmap.pagefailed_bg);
-                img.setVisibility(View.VISIBLE);
-                animProgressBar.setVisibility(View.GONE);
-                setTvNoDataContent();
-                clickEnable = true;
-                break;
-            case NETWORK_LOADING:
-                errorState = NETWORK_LOADING;
-                animProgressBar.setVisibility(View.VISIBLE);
-                img.setVisibility(View.GONE);
-                animProgressBar.setVisibility(View.VISIBLE);
-                setTvNoDataContent();
-                /********网络相关，暂时不用************/
-                clickEnable = false;
-                break;
-            case NODATA:
-                errorState = NODATA;
-                img.setBackgroundResource(R.mipmap.page_icon_empty);
-                img.setVisibility(View.VISIBLE);
-                animProgressBar.setVisibility(View.GONE);
-                setTvNoDataContent();
-                clickEnable = false;
-                break;
-            case HIDE_LAYOUT:
-                setVisibility(View.GONE);
-                break;
-            case NODATA_ENABLE_CLICK:
-                errorState = NODATA_ENABLE_CLICK;
-                img.setBackgroundResource(R.mipmap.page_icon_empty);
-                img.setVisibility(View.VISIBLE);
-                animProgressBar.setVisibility(View.GONE);
-                setTvNoDataContent();
-                clickEnable = true;
-                break;
-            case COMMON_ERROR:
-                errorState = NETWORK_ERROR;
-                img.setBackgroundResource(R.mipmap.pagefailed_bg);
-                img.setVisibility(View.VISIBLE);
-                animProgressBar.setVisibility(View.GONE);
-                setTvNoDataContent();
-                clickEnable = false;
-                break;
-            case NO_LOGIN:
-                errorState = NO_LOGIN;
-                img.setBackgroundResource(R.mipmap.page_icon_empty);
-                img.setVisibility(View.VISIBLE);
-                animProgressBar.setVisibility(View.GONE);
-                setTvNoDataContent();
-                clickEnable = false;
-                break;
-            default:
-                break;
-        }
+        if(listener!=null&&isClick==true)
+            listener.onClick(v);
     }
 
     /**
-     * 当没有数据时，提示是因为什么情况而没数据
-     *
-     * @param noDataContent
+     * 初始化
+     * @param context
      */
-    public void setNoDataContent(String noDataContent) {
-        this.strNoDataContent = noDataContent;
+    private void initView(Context context){
+        View view = View.inflate(context, R.layout.weight_empty_layout,null);
+        img = (ImageView) view.findViewById(R.id.img_error_layout);
+        tv = (TextView) view.findViewById(R.id.tv_error_layout);
+        animProgressBar = (ProgressBar) view.findViewById(R.id.animProgress);
+        view.setOnClickListener(this);  //Emptylayout的
+        setType(nowType,false);
+        addView(view);  //切记要将布局文件加入
     }
 
     /**
-     * 该layout点击事件
-     *
+     * 获取点击事件
      * @param listener
      */
-    public void setOnLayoutClickListener(OnClickListener listener) {
+    public void setOnClickListener(View.OnClickListener listener){
         this.listener = listener;
     }
 
-    public void setTvNoDataContent() {
-        if (errorState == NO_LOGIN) {
-            tv.setText(R.string.empty_no_login);
-            return;
-        }
-        if (errorState == NODATA_ENABLE_CLICK) {
-            tv.setText(R.string.empty_no_date_click);
-            return;
-        }
-        if (errorState == NODATA) {
-            tv.setText(R.string.empty_no_date_click);
-            return;
-        }
-        if (errorState == NETWORK_ERROR) {
-            tv.setText(R.string.empty_click);
-            return;
-        }
-        if (errorState == COMMON_ERROR) {
-            tv.setText(R.string.empty_err);
-            return;
-        }
-        if (!strNoDataContent.equals(""))
-            tv.setText(strNoDataContent);
-        else {
-            tv.setText(R.string.empty_no_date);
+    /**
+     * 设置文字提示
+     * @param msg
+     */
+    public void setMsg(String msg){
+        tv.setText(msg);
+    }
+
+    /**
+     * 设置图片资源文件
+     * 当res中传入0时，图片被删除
+     * @param res
+     */
+    public void setImg(int res){
+        img.setVisibility(View.VISIBLE);
+        img.setBackgroundResource(res);
+    }
+
+    /**
+     * 设置图片是否显示
+     * @param v
+     */
+    public void setImgVisibility(boolean v){
+        if(v)
+            img.setVisibility(View.VISIBLE);
+        else
+            img.setVisibility(View.GONE);
+    }
+
+    /**
+     * 设置view显示类型
+     * @param type
+     * @param isClick
+     */
+    public void setType(int type,boolean isClick){
+        nowType = type;
+        this.isClick = isClick;
+        animProgressBar.setVisibility(View.GONE);
+        setVisibility(View.VISIBLE);
+        tv.setText(msg.get(nowType).toString());
+        switch(nowType){
+            case ERROR:
+                //根据需要自行完善
+                break;
+            case LOADING:
+                setImgVisibility(false);
+                animProgressBar.setVisibility(View.VISIBLE);
+                break;
+            case GONE:
+                setVisibility(View.GONE);
+                break;
+            case NODATA:
+                //根据需要自行完善
+                break;
         }
     }
 
-    @Override
-    public void setVisibility(int visibility) {
-        if (visibility == View.GONE)    //当前emptyLayout状态
-            errorState = HIDE_LAYOUT;
-        super.setVisibility(visibility);
-    }
 }

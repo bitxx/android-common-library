@@ -1,12 +1,9 @@
 package com.wj.demo.ui.adapter;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,6 +27,7 @@ public class ViewHolderItem extends RecyclerView.ViewHolder {
     private View view;
     private RelativeLayout rlItem;
     private TextView tvName;
+    private TextView tvDetail;
 
     public ViewHolderItem(View itemView,AppCompatActivity activity) {
         super(itemView);
@@ -37,6 +35,7 @@ public class ViewHolderItem extends RecyclerView.ViewHolder {
         this.activity = activity;
         rlItem = (RelativeLayout)view.findViewById(R.id.rl_item);
         tvName = (TextView)view.findViewById(R.id.tv_name);
+        tvDetail = (TextView)view.findViewById(R.id.tv_detail);
     }
 
     /**
@@ -45,6 +44,8 @@ public class ViewHolderItem extends RecyclerView.ViewHolder {
     public void bindItem(ArrayList<Item> items,int position){
         final Item item = items.get(position);
         tvName.setText(item.getName());
+        tvDetail.setText(item.getState());
+
         rlItem.setOnClickListener(new MyOnClickListener(){
 
             @Override

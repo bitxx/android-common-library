@@ -44,7 +44,7 @@ public class MainActivity extends BaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "idea_wj@163.com", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "https://github.com/jason-wj/android-common-library", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -79,36 +79,55 @@ public class MainActivity extends BaseActivity {
 
         Item item1 = new Item();
         item1.setName("1.JSON生成与解析");
+        item1.setState("已实现");
         item1.setActivity(DemoJsonActivity.class);
         items.add(item1);
 
         Item item2 = new Item();
         item2.setName("2.GIF动画");
+        item2.setState("已实现");
         item2.setActivity(DemoGifViewActivity.class);
         items.add(item2);
 
         Item item3 = new Item();
         item3.setName("3.头像切换");
+        item3.setState("已实现");
         item3.setActivity(DemoChangeProtraitActivity.class);
         items.add(item3);
 
         Item item4 = new Item();
         item4.setName("4.有弹性的ScrollView");
+        item4.setState("已实现");
         item4.setActivity(DemoElasticScorllViewActivity.class);
         items.add(item4);
 
         Item item5 = new Item();
+        item5.setState("未实现");
         item5.setName("5.页面手势滑动");
         items.add(item5);
 
         Item item6 = new Item();
+        item6.setState("未实现");
         item6.setName("6.Socket");
         items.add(item6);
 
         Item item7 = new Item();
         item7.setName("7.图片手势缩放");
+        item7.setState("已实现");
         item7.setActivity(DemoZoomImageActivity.class);
         items.add(item7);
+
+        Item item8 = new Item();
+        item8.setName("8.EmptyLayout");
+        item8.setState("已实现");
+        item8.setActivity(DemoEmptyLayoutActivity.class);
+        items.add(item8);
+
+        Item item9 = new Item();
+        item9.setName("9.可清空的EditText");
+        item9.setState("已实现");
+        item9.setActivity(DemoClearEdittextActivity.class);
+        items.add(item9);
     }
 
     @Override

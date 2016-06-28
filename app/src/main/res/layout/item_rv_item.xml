@@ -16,6 +16,7 @@
         android:drawableLeft="@mipmap/me_icon_dingdan" />
 
     <TextView
+        android:id="@+id/tv_detail"
         android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_alignParentRight="true"

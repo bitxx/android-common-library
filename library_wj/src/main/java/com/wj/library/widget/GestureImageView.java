@@ -151,7 +151,7 @@ public class GestureImageView extends ImageView implements ViewTreeObserver.OnGl
 
     /**
      * View和Window绑定时就会调用这个函数，此时将会有一个Surface进行绘图之类的逻辑。
-     * 该方法运行在onResume之后；
+     * 该方法运行在onResume之后；在第一次onDraw之前调用的，只会调用一次
      * onResume生命周期后就能获取LayoutParam，进而可以设置高度和宽度了
      *
      * 所以在在该方法中设置视图尺寸最合适

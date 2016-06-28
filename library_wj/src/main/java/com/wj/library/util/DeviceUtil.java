@@ -41,15 +41,6 @@ public class DeviceUtil {
     public static int SCREEN_WIDTH = 0;
 
     /**
-     * 初始化系统需要的参数
-     * @param context
-     */
-    public static void initDeviceData(Context context){
-        getScreenSize(context);
-        getStatusHeight(context);
-    }
-
-    /**
      * 拨出电话号
      * @param phoneNum
      * @param context
@@ -62,37 +53,6 @@ public class DeviceUtil {
     }
 
     /**
-     * 获取系统状态栏高度
-     *
-     * @param context
-     * @return > 0 success; <= 0 fail
-     */
-    public static int getStatusHeight(Context context) {
-        try {
-            Class<?> cls = Class.forName("com.android.internal.R$dimen");
-            Object obj = cls.newInstance();
-            Field field = cls.getField("status_bar_height");
-            int x = Integer.parseInt(field.get(obj).toString());
-            return context.getResources().getDimensionPixelSize(x);
-        } catch (Exception e) {
-        }
-        return 0;
-    }
-
-    @TargetApi(19)
-    private static void setTranslucentStatus(Activity activity,boolean on) {
-        Window win = activity.getWindow();
-        WindowManager.LayoutParams winParams = win.getAttributes();
-        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
-        if (on) {
-            winParams.flags |= bits;
-        } else {
-            winParams.flags &= ~bits;
-        }
-        win.setAttributes(winParams);
-    }
-
-    /**
      * 隐藏屏幕键盘
      * @param view
      */
@@ -102,25 +62,6 @@ public class DeviceUtil {
         ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    /**
-     * 用于计算手机屏幕的长宽以及像素
-     */
-    public static void getScreenSize(Context context) {
-        if (SCREEN_HEIGHT == 0 || SCREEN_WIDTH == 0) {
-            SCREEN_HEIGHT = context.getResources().getDisplayMetrics().heightPixels; // 屏幕高度
-            SCREEN_WIDTH = context.getResources().getDisplayMetrics().widthPixels;// 屏幕宽度
-        }
-    }
-
-    /**
-     * 检查是否存在SDCard
-     *
-     * @return
-     */
-    public static boolean hasSdcard() {
-        String state = Environment.getExternalStorageState();
-        return state.equals(Environment.MEDIA_MOUNTED);
-    }
 
     /**
      * 获取IMEI

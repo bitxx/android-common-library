@@ -1,91 +1,88 @@
 package com.wj.library.util;
 
+import android.os.Environment;
+import android.os.StatFs;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 /**
  * Created by 武健 on 2015/9/12 0012.
+ *
  * @version 1.0
- * 通用的一些SD相关方法
+ *          通用的一些SD相关方法
  */
 public class SDCardUtils {
+
+    private SDCardUtils() {
+        /* cannot be instantiated */
+        throw new UnsupportedOperationException("cannot be instantiated");
+    }
+
     /**
-     * Check the SD card
+     * 判断SDCard是否可用
      *
      * @return
      */
-    public static boolean checkSDCardAvailable() {
-        return android.os.Environment.getExternalStorageState().equals(
-                android.os.Environment.MEDIA_MOUNTED);
+    public static boolean isSDCardEnable() {
+        return Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED);
+
     }
 
     /**
-     * Check if the file is exists
-     * @param filePath
-     * @param fileName
-     * @return
-     */
-    public static boolean isFileExistsInSDCard(String filePath, String fileName){
-        boolean flag = false;
-        if (checkSDCardAvailable()) {
-            File file = new File(filePath, fileName);
-            if (file.exists()) {
-                flag = true;
-            }
-        }
-        return flag;
-    }
-
-    /**
-     * Write file to SD card
-     * @param filePath
-     * @param filename
-     * @param content
-     * @return
-     * @throws Exception
-     */
-    public static boolean saveFileToSDCard(String filePath, String filename, String content)
-            throws Exception {
-        boolean flag = false;
-        if (checkSDCardAvailable()) {
-            File dir = new File(filePath);
-            if (!dir.exists()) {
-                dir.mkdir();
-            }
-            File file = new File(filePath, filename);
-            FileOutputStream outStream = new FileOutputStream(file);
-            outStream.write(content.getBytes());
-            outStream.close();
-            flag = true;
-        }
-        return flag;
-    }
-
-    /**
-     * Read file as stream from SD card
+     * 获取SD卡路径
      *
-     * @param fileName
-     *            String PATH =
-     *            Environment.getExternalStorageDirectory().getAbsolutePath() +
-     *            "/dirName";
      * @return
      */
-    public static byte[] readFileFromSDCard(String filePath, String fileName) {
-        byte[] buffer = null;
-        try {
-            if (checkSDCardAvailable()) {
-                String filePaht = filePath + "/" + fileName;
-                FileInputStream fin = new FileInputStream(filePaht);
-                int length = fin.available();
-                buffer = new byte[length];
-                fin.read(buffer);
-                fin.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static String getSDCardPath() {
+        return Environment.getExternalStorageDirectory().getAbsolutePath()
+                + File.separator;
+    }
+
+    /**
+     * 获取SD卡的剩余容量 单位byte
+     *
+     * @return
+     */
+    public static long getSDCardAllSize() {
+        if (isSDCardEnable()) {
+            StatFs stat = new StatFs(getSDCardPath());
+            // 获取空闲的数据块的数量
+            long availableBlocks = (long) stat.getAvailableBlocks() - 4;
+            // 获取单个数据块的大小（byte）
+            long freeBlocks = stat.getAvailableBlocks();
+            return freeBlocks * availableBlocks;
         }
-        return buffer;
+        return 0;
+    }
+
+    /**
+     * 获取指定路径所在空间的剩余可用容量字节数，单位byte
+     *
+     * @param filePath
+     * @return 容量字节 SDCard可用空间，内部存储可用空间
+     */
+    public static long getFreeBytes(String filePath) {
+        // 如果是sd卡的下的路径，则获取sd卡可用容量
+        if (filePath.startsWith(getSDCardPath())) {
+            filePath = getSDCardPath();
+        } else {// 如果是内部存储的路径，则获取内存存储的可用容量
+            filePath = Environment.getDataDirectory().getAbsolutePath();
+        }
+        StatFs stat = new StatFs(filePath);
+        long availableBlocks = (long) stat.getAvailableBlocks() - 4;
+        return stat.getBlockSize() * availableBlocks;
+    }
+
+    /**
+     * 获取系统存储路径
+     *
+     * @return
+     */
+    public static String getRootDirectoryPath() {
+        return Environment.getRootDirectory().getAbsolutePath();
     }
 
 

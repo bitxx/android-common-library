@@ -40,7 +40,7 @@ public class CommonHelper {
      */
     public static String getPath(String fromPath, String toPath, Context context,String userId) {
         String newPath;
-        if (SDCardUtils.checkSDCardAvailable()) {
+        if (SDCardUtils.isSDCardEnable()) {
             File savedir = new File(toPath);
             if (!savedir.exists()) {
                 savedir.mkdirs();

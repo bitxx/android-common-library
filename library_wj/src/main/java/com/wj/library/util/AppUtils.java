@@ -49,4 +49,42 @@ public class AppUtils {
         }
         return null;
     }
+
+    /**
+     * 获取当前应用版本、包名等信息
+     *
+     * @param context
+     * @return
+     */
+    public static String getApplicationInfo(Context context) {
+        try {
+            PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);  // 当前应用的版本名称
+            String versionName = info.versionName;
+            int versionCode = info.versionCode;  // 当前版本的版本号
+            String packageNames = info.packageName;  // 当前版本的包名
+            String appInfo = "versionName:" + versionName + " versionCode: " + versionCode + " packageName:" + packageNames;
+            return appInfo;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 获取当前app版本号
+     * @param context
+     * @return
+     */
+    public static String getVersion(Context context){
+        try{
+            PackageManager manager = context.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(context.getPackageName(),0);
+            String versionName = info.versionName;
+            return versionName;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
 }

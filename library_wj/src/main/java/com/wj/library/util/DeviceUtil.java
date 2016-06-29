@@ -37,8 +37,6 @@ import java.util.List;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class DeviceUtil {
-    public static int SCREEN_HEIGHT = 0;
-    public static int SCREEN_WIDTH = 0;
 
     /**
      * 拨出电话号
@@ -51,17 +49,6 @@ public class DeviceUtil {
                 + phoneNum));
         context.startActivity(phoneIntent);
     }
-
-    /**
-     * 隐藏屏幕键盘
-     * @param view
-     */
-    public static void hideSoftKeyboard(View view,Context context) {
-        if (view == null)
-            return;
-        ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
 
     /**
      * 获取IMEI
@@ -85,43 +72,6 @@ public class DeviceUtil {
     }
 
     /**
-     * 获取当前应用版本、包名等信息
-     *
-     * @param context
-     * @return
-     */
-    public static String getApplicationInfo(Context context) {
-        try {
-            PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);  // 当前应用的版本名称
-            String versionName = info.versionName;
-            int versionCode = info.versionCode;  // 当前版本的版本号
-            String packageNames = info.packageName;  // 当前版本的包名
-            String appInfo = "versionName:" + versionName + " versionCode: " + versionCode + " packageName:" + packageNames;
-            return appInfo;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * 获取当前app版本号
-     * @param context
-     * @return
-     */
-    public static String getVersion(Context context){
-        try{
-            PackageManager manager = context.getPackageManager();
-            PackageInfo info = manager.getPackageInfo(context.getPackageName(),0);
-            String versionName = info.versionName;
-            return versionName;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
-    /**
      * 判断GPS是否打开
      *
      * @param context
@@ -133,76 +83,6 @@ public class DeviceUtil {
         List<String> accessibleProviders = lm.getProviders(true);
         return accessibleProviders != null && accessibleProviders.size() > 0;
     }
-
-    /**
-     * 判断网络连接是否可用
-     *
-     * @param context
-     * @return
-     */
-    public static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm == null) {
-        } else {
-            //如果仅仅是用来判断网络连接
-            //则可以使用 cm.getActiveNetworkInfo().isAvailable();
-            NetworkInfo[] info = cm.getAllNetworkInfo();
-            if (info != null) {
-                for (int i = 0; i < info.length; i++) {
-                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 判断WIFI是否打开
-     *
-     * @param context
-     * @return
-     */
-    public static boolean isWifiEnabled(Context context) {
-        ConnectivityManager mgrConn = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        TelephonyManager mgrTel = (TelephonyManager) context
-                .getSystemService(Context.TELEPHONY_SERVICE);
-        return ((mgrConn.getActiveNetworkInfo() != null && mgrConn
-                .getActiveNetworkInfo().getState() == NetworkInfo.State.CONNECTED) || mgrTel
-                .getNetworkType() == TelephonyManager.NETWORK_TYPE_UMTS);
-    }
-
-    /**
-     * 判断是否是3G网络
-     *
-     * @param context
-     * @return
-     */
-    public static boolean is3rd(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkINfo = cm.getActiveNetworkInfo();
-        return networkINfo != null
-                && networkINfo.getType() == ConnectivityManager.TYPE_MOBILE;
-    }
-
-    /**
-     * 判断是wifi还是3g网络
-     *
-     * @param context
-     * @return
-     */
-    public static boolean isWifi(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkINfo = cm.getActiveNetworkInfo();
-        return networkINfo != null
-                && networkINfo.getType() == ConnectivityManager.TYPE_WIFI;
-    }
-
 
     /**
      * 检查某权限是否可用

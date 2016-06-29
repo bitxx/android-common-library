@@ -10,6 +10,7 @@ import com.wj.library.util.DeviceUtil;
 
 import java.util.Calendar;
 import com.wj.library.R;
+import com.wj.library.util.KeyBoardUtils;
 
 /**
  * @author idea_wj 2015-01-18
@@ -43,7 +44,7 @@ public abstract class MyBaseActivity extends AppCompatActivity implements View.O
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        DeviceUtil.hideSoftKeyboard(getCurrentFocus(),this);
+        KeyBoardUtils.closeKeybord(getCurrentFocus(),this);
         setContentView(R.layout.view_null);
     }
 

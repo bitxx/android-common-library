@@ -13,6 +13,7 @@ import com.wj.library.util.DeviceUtil;
 
 import java.util.Calendar;
 import com.wj.library.R;
+import com.wj.library.util.KeyBoardUtils;
 
 /**
  * @author idea_wj 2015-08-05
@@ -48,7 +49,7 @@ public abstract class MyBaseFragment extends Fragment implements View.OnClickLis
     @Override
     public void onDestroy() {
         super.onDestroy();
-        DeviceUtil.hideSoftKeyboard(getActivity().getCurrentFocus(),getActivity());
+        KeyBoardUtils.closeKeybord(getActivity().getCurrentFocus(),getActivity());
         getActivity().setContentView(R.layout.view_null);
     }
 

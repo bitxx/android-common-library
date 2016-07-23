@@ -13,12 +13,9 @@ public class KeyBoardUtils {
      * 打卡软键盘
      *
      * @param view
-     *
-     * @param mContext
-     *            上下文
+     * @param mContext 上下文
      */
-    public static void openKeybord(View view, Context mContext)
-    {
+    public static void openKeybord(View view, Context mContext) {
         InputMethodManager imm = (InputMethodManager) mContext
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(view, InputMethodManager.RESULT_SHOWN);
@@ -30,15 +27,14 @@ public class KeyBoardUtils {
      * 关闭软键盘
      *
      * @param view
-     *
-     * @param mContext
-     *            上下文
+     * @param mContext 上下文
      */
-    public static void closeKeybord(View view, Context mContext)
-    {
-        InputMethodManager imm = (InputMethodManager) mContext
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
+    public static void closeKeybord(View view, Context mContext) {
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) mContext
+                    .getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

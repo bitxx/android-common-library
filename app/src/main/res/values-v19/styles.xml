@@ -1,0 +1,7 @@
+<resources>
+    <!--新定义主题-->
+    <style name="MyTheme" parent="MyBaseAppTheme">
+        <item name="android:windowTranslucentStatus">true</item>
+
+    </style>
+</resources>

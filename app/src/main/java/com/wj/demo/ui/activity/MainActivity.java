@@ -2,10 +2,13 @@ package com.wj.demo.ui.activity;
 
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,14 +27,18 @@ public class MainActivity extends BaseActivity {
 
     private RecyclerView rvItem;  //使用了recyclerView
     private Toolbar toolbar;
+    private NavigationView navigationView;
+    private DrawerLayout drawerLayout;
     private AdapterRecyclerItem adapterRecyclerItem;
     private ArrayList<Item> items;
 
     @Override
     protected void initView() {
         setContentView(R.layout.activity_main);
-        rvItem = (RecyclerView)findViewById(R.id.rv_item);
+        rvItem = (RecyclerView) findViewById(R.id.rv_item);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        navigationView = (NavigationView) findViewById(R.id.nv_main_navigation);
+        drawerLayout = (DrawerLayout) findViewById(R.id.dl_main_drawer);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         //地址动态添加
@@ -49,22 +56,32 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        ToolbarHelper.initToolbar(this,toolbar,R.string.app_name,R.mipmap.ic_drawer_home,Color.WHITE);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        menuItem.setChecked(true);
+                        drawerLayout.closeDrawers();
+                        return true;
+                    }
+                });
+
+        ToolbarHelper.initToolbar(this, toolbar, R.string.app_name, R.string.toolBar, R.mipmap.ic_drawer_home, Color.WHITE);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int menuItemId = item.getItemId();
                 if (menuItemId == R.id.action_search) {
-                    ToastHelper.toastShort(MainActivity.this,R.string.menu_search);
+                    ToastHelper.toastShort(MainActivity.this, R.string.menu_search);
 
                 } else if (menuItemId == R.id.action_notification) {
-                    ToastHelper.toastShort(MainActivity.this,R.string.menu_notifications);
+                    ToastHelper.toastShort(MainActivity.this, R.string.menu_notifications);
 
                 } else if (menuItemId == R.id.action_settings) {
-                    ToastHelper.toastShort(MainActivity.this,R.string.item_setting);
+                    ToastHelper.toastShort(MainActivity.this, R.string.item_setting);
 
                 } else if (menuItemId == R.id.action_about) {
-                    ToastHelper.toastShort(MainActivity.this,R.string.item_about);
+                    ToastHelper.toastShort(MainActivity.this, R.string.item_about);
 
                 }
                 return true;
@@ -140,8 +157,9 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case android.R.id.home:
+                drawerLayout.openDrawer(Gravity.LEFT);
                 break;
         }
 

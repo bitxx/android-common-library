@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@mipmap/me_icon_dingdan"
+            android:title="个人资料"/>
+        <item
+            android:id="@+id/nav_messages"
+            android:icon="@mipmap/me_icon_dingdan"
+            android:title="动态中心"/>
+        <item
+            android:id="@+id/nav_friends"
+            android:icon="@mipmap/me_icon_dingdan"
+            android:title="我的图库"/>
+        <item
+            android:id="@+id/nav_discussion"
+            android:icon="@mipmap/me_icon_dingdan"
+            android:title="我的博客"/>
+    </group>
+
+    <item android:title="Other">
+        <menu>
+            <item
+                android:icon="@mipmap/me_icon_dingdan"
+                android:title="设置"/>
+            <item
+                android:icon="@mipmap/me_icon_dingdan"
+                android:title="问题反馈"/>
+        </menu>
+    </item>
+
+</menu>

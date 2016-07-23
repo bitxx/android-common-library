@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.wj.library.util.DeviceUtil;
+import com.wj.library.util.ScreenUtils;
 
 /**
  * toolbar中常用的方法，统一管理
@@ -36,7 +37,7 @@ public class ToolbarHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
         {
             toolbar.setPadding(toolbar.getPaddingLeft(),
-                    DeviceUtil.getStatusHeight(activity),
+                    ScreenUtils.getStatusHeight(activity),
                     toolbar.getPaddingRight(),
                     toolbar.getPaddingBottom());
         }

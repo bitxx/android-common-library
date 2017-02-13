@@ -9,3 +9,4 @@
     android:packageNames="com.tencent.mm" />
 
 <!--监听的配置，什么时候监听、返回方式、能否访问窗口中内容、访问哪个包（腾讯的）-->
+

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 
 import com.wj.demo.R;
 import com.wj.demo.domain.Item;
+import com.wj.demo.ui.activity.hongbao.DemoWeChatGetHongbaoActivity;
 import com.wj.demo.ui.adapter.AdapterRecyclerItem;
 import com.wj.demo.ui.base.BaseActivity;
 import com.wj.library.helper.ToastHelper;
@@ -145,6 +146,12 @@ public class MainActivity extends BaseActivity {
         item9.setState("已实现");
         item9.setActivity(DemoClearEdittextActivity.class);
         items.add(item9);
+
+        Item item10 = new Item();
+        item10.setName("10.微信抢红包");
+        item10.setState("已实现");
+        item10.setActivity(DemoWeChatGetHongbaoActivity.class);
+        items.add(item10);
     }
 
     @Override

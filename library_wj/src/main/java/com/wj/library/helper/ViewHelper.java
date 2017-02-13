@@ -1,5 +1,6 @@
 package com.wj.library.helper;
 
+import android.content.Context;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +31,35 @@ public class ViewHelper {
             }
         });
         return view.getWidth();
+    }
+
+    public static int getViewHeight(final View view){
+        ViewTreeObserver vto = view.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                view.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+            }
+        });
+        return view.getHeight();
+    }
+
+    /**
+     * 屏幕宽度
+     * @param context
+     * @return
+     */
+    public static int getScreenWidth(Context context){
+        return context.getResources().getDisplayMetrics().widthPixels;
+    }
+
+    /**
+     * 屏幕长度
+     * @param context
+     * @return
+     */
+    public static int getScreenHeight(Context context){
+        return context.getResources().getDisplayMetrics().heightPixels;
     }
 
     /**

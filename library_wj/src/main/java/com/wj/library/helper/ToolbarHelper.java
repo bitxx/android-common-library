@@ -46,6 +46,50 @@ public class ToolbarHelper {
     }
 
     /**
+     * 基本的，只是加载了toolbar
+     * @param activity
+     * @param toolbar
+     */
+    public static void initToolbar(AppCompatActivity activity, Toolbar toolbar){
+        toolbar.setTitle("");//设置主标题
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+        {
+            toolbar.setPadding(toolbar.getPaddingLeft(),
+                    ScreenUtils.getStatusHeight(activity),
+                    toolbar.getPaddingRight(),
+                    toolbar.getPaddingBottom());
+        }
+        activity.setSupportActionBar(toolbar);
+    }
+
+    /**
+     * 基本的
+     * @param activity
+     * @param toolbar
+     * @param title  标题
+     * @param titleColor  标题颜色
+     */
+    public static void initToolbar(AppCompatActivity activity, Toolbar toolbar, int title,  int titleColor){
+        if(title>0)
+            toolbar.setTitle(title);//设置主标题
+        else
+            toolbar.setTitle("");//设置主标题
+        if(titleColor>0)
+            toolbar.setTitleTextColor(titleColor);
+        else
+            toolbar.setTitleTextColor(Color.WHITE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+        {
+            toolbar.setPadding(toolbar.getPaddingLeft(),
+                    ScreenUtils.getStatusHeight(activity),
+                    toolbar.getPaddingRight(),
+                    toolbar.getPaddingBottom());
+        }
+        //toolbar.inflateMenu(R.menu.base_toolbar_menu);//设置右上角的填充菜单,此不支持setSupportActionBar
+        activity.setSupportActionBar(toolbar);
+    }
+
+    /**
      * 初始化toolbar，若要沉浸式，需要在style中开启透明：<item name="android:windowTranslucentStatus">true</item>
      * @param activity
      * @param toolbar

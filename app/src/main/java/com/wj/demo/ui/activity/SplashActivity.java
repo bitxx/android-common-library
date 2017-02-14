@@ -1,6 +1,9 @@
 package com.wj.demo.ui.activity;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.wj.demo.R;
 import com.wj.demo.ui.base.BaseActivity;

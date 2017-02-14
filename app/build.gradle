@@ -10,6 +10,20 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
+    }
+
+    afterEvaluate{
+        tasks.matching{
+            it.name.startsWith('dex')
+        }.each { dx ->
+            if(dx.additionalParameters == null){
+                dx.additionalParameters = []
+            }
+            dx.additionalParameters += '--multi-dex'
+            dx.additionalParameters += '--main-dex-list=$projectDir/multidex.keep'.toString()
+            dx.additionalParameters += '--minimal-main-dex'
+        }
     }
 
     signingConfigs {

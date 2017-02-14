@@ -77,8 +77,8 @@ public class MyBaseAppManager {
      */
     public void finishActivity(AppCompatActivity activity){
         if(activity!=null&&activity.isFinishing()==false){
-
-            activityStack.remove(activity);
+            if(activityStack!=null)
+                activityStack.remove(activity);
             activity.finish();
             activity=null;
         }

@@ -13,17 +13,29 @@ android {
         multiDexEnabled true
     }
 
-    afterEvaluate{
-        tasks.matching{
-            it.name.startsWith('dex')
-        }.each { dx ->
-            if(dx.additionalParameters == null){
-                dx.additionalParameters = []
-            }
-            dx.additionalParameters += '--multi-dex'
-            dx.additionalParameters += '--main-dex-list=$projectDir/multidex.keep'.toString()
-            dx.additionalParameters += '--minimal-main-dex'
-        }
+    //gradle1.4以前使用
+//    afterEvaluate{
+//        println "----------------------------------------hello world"
+//        tasks.matching{
+//            println "----------------------------------------hello world2"
+//            it.name.startsWith('dex')
+//        }.each { dx ->
+//            if(dx.additionalParameters == null){
+//                dx.additionalParameters = []
+//            }
+//
+//            dx.additionalParameters += '--multi-dex'
+//            dx.additionalParameters += '--main-dex-list=$projectDir/multidex.keep'.toString()
+//            dx.additionalParameters += '--minimal-main-dex'
+//        }
+//    }
+
+    //gradle1.4以后使用
+    dexOptions {
+        javaMaxHeapSize "4g"
+        preDexLibraries = false
+        additionalParameters = ['--multi-dex', '--main-dex-list=' + project.rootDir.absolutePath + '/app/multidex.keep', '--minimal-main-dex',
+                                '--set-max-idx-number=30000']
     }
 
     signingConfigs {

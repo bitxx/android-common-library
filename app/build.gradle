@@ -49,6 +49,15 @@ android {
 
     }
 
+    productFlavors {
+        dev {
+            minSdkVersion 25
+        }
+        prod {
+            minSdkVersion 15
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true

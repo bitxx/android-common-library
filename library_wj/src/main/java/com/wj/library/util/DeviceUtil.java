@@ -14,12 +14,12 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-
 
 
 import java.lang.reflect.Field;
@@ -39,11 +39,23 @@ import java.util.List;
 public class DeviceUtil {
 
     /**
+     * 将程序放在后台，类似home键功能
+     */
+    public static void appInBack(AppCompatActivity activity) {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        activity.startActivity(intent);
+
+    }
+
+    /**
      * 拨出电话号
+     *
      * @param phoneNum
      * @param context
      */
-    public static void callPhone(String phoneNum,Context context){
+    public static void callPhone(String phoneNum, Context context) {
         Intent phoneIntent = new Intent(
                 "android.intent.action.CALL", Uri.parse("tel:"
                 + phoneNum));
@@ -86,22 +98,24 @@ public class DeviceUtil {
 
     /**
      * 检查某权限是否可用
+     *
      * @param context
      * @param permission
      * @return
      */
-    public static boolean checkPermission(Context context,String permission){
+    public static boolean checkPermission(Context context, String permission) {
         PackageManager pkm = context.getPackageManager();
         return (PackageManager.PERMISSION_GRANTED == pkm.checkPermission(permission, context.getPackageName()));
     }
 
     /**
      * 请求权限
-     * @param permission 所要请求的权限们
+     *
+     * @param permission            所要请求的权限们
      * @param requestPermissionCode 请求码
      */
     @TargetApi(Build.VERSION_CODES.M)
-    public static void requestPermission(FragmentActivity activity, String[] permission, int requestPermissionCode){
+    public static void requestPermission(FragmentActivity activity, String[] permission, int requestPermissionCode) {
         activity.requestPermissions(permission,
                 requestPermissionCode);
     }

@@ -2,6 +2,8 @@ package com.wj.demo.ui.activity;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
@@ -21,7 +23,7 @@ public class DemoZoomImageActivity extends BaseActivity {
     private Toolbar toolbar;
     private TextView tvTitle;
     private GestureImageView mivImage;
-
+    Bitmap bitmap;
     @Override
     protected void initView() {
         setContentView(R.layout.activity_demo_zoom_img);
@@ -32,7 +34,7 @@ public class DemoZoomImageActivity extends BaseActivity {
         ToolbarHelper.initToolbar(this,toolbar,R.mipmap.ic_back);
 
         mivImage = (GestureImageView) findViewById(R.id.miv_img);
-        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(),
+        bitmap = BitmapFactory.decodeResource(this.getResources(),
                 R.mipmap.demo_img_zoom);
         mivImage.setImageBitmap(bitmap);
         mivImage.setType(GestureImageView.Type.FIT_CENTER);
@@ -44,5 +46,13 @@ public class DemoZoomImageActivity extends BaseActivity {
         switch (view.getId()){
 
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        bitmap.recycle();
+        super.onDestroy();
+        System.gc();
+
     }
 }

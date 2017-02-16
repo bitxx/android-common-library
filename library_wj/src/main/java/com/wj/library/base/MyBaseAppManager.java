@@ -1,11 +1,12 @@
 package com.wj.library.base;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
+import com.wj.library.util.LogUtil;
 
 import java.util.Stack;
 
@@ -77,8 +78,7 @@ public class MyBaseAppManager {
      */
     public void finishActivity(AppCompatActivity activity){
         if(activity!=null&&activity.isFinishing()==false){
-            if(activityStack!=null)
-                activityStack.remove(activity);
+            activityStack.remove(activity);
             activity.finish();
             activity=null;
         }
@@ -122,6 +122,7 @@ public class MyBaseAppManager {
      * 结束所有的Activity
      */
     public void finishAllActivity(){
+        LogUtil.e(TAG,activityStack.size()+"");
         for (int i = 0, size = activityStack.size(); i < size; i++){
             if (null != activityStack.get(i)){
                 activityStack.get(i).finish();

@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import com.wj.demo.R;
 import com.wj.demo.domain.Item;
 import com.wj.demo.ui.activity.hongbao.DemoWeChatGetHongbaoActivity;
+import com.wj.demo.ui.activity.killprocess.DemoNotKillProcessActivity;
 import com.wj.demo.ui.adapter.AdapterRecyclerItem;
 import com.wj.demo.ui.base.BaseActivity;
 import com.wj.library.helper.ToastHelper;
@@ -152,6 +153,12 @@ public class MainActivity extends BaseActivity {
         item10.setState("已实现");
         item10.setActivity(DemoWeChatGetHongbaoActivity.class);
         items.add(item10);
+
+        Item item11 = new Item();
+        item11.setName("11.进程永驻");
+        item11.setState("已实现");
+        item11.setActivity(DemoNotKillProcessActivity.class);
+        items.add(item11);
     }
 
     @Override

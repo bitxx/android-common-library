@@ -21,8 +21,7 @@
         <activity
             android:name=".ui.activity.SplashActivity"
             android:label="@string/app_name"
-            android:theme="@style/first_activity_start"
-            >
+            android:theme="@style/first_activity_start">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,19 +38,30 @@
         <activity android:name=".ui.activity.DemoEmptyLayoutActivity" />
         <activity android:name=".ui.activity.DemoClearEdittextActivity" />
         <activity android:name=".ui.activity.hongbao.DemoWeChatGetHongbaoActivity" />
+        <activity android:name=".ui.activity.killprocess.DemoNotKillProcessActivity" />
 
         <service
             android:name=".ui.activity.hongbao.HongbaoService"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
             <meta-data
                 android:name="android.accessibilityservice"
-                android:resource="@xml/config"
-                />
+                android:resource="@xml/config" />
+        </service>
+
+        <!--实现进程无法被杀死，两个service，一个是本地进程，另一个标为远程进程，也就是另一个进程-->
+        <service
+            android:name=".ui.activity.killprocess.LocalService"
+            >
+        </service>
+        <service
+            android:name=".ui.activity.killprocess.RemoteService"
+            android:process=".remoteservice"
+            >
         </service>
 
     </application>

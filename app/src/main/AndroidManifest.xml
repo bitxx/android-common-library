@@ -39,6 +39,7 @@
         <activity android:name=".ui.activity.DemoClearEdittextActivity" />
         <activity android:name=".ui.activity.hongbao.DemoWeChatGetHongbaoActivity" />
         <activity android:name=".ui.activity.killprocess.DemoNotKillProcessActivity" />
+        <activity android:name=".ui.activity.DemoJNIActivity"/>
 
         <service
             android:name=".ui.activity.hongbao.HongbaoService"

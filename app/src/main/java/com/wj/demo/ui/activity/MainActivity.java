@@ -126,8 +126,9 @@ public class MainActivity extends BaseActivity {
         items.add(item5);
 
         Item item6 = new Item();
-        item6.setState("未实现");
-        item6.setName("6.Socket");
+        item6.setState("测试中");
+        item6.setName("6.JNI测试");
+        item6.setActivity(DemoJNIActivity.class);
         items.add(item6);
 
         Item item7 = new Item();
@@ -179,4 +180,5 @@ public class MainActivity extends BaseActivity {
 
         return false;
     }
+
 }

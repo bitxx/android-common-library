@@ -81,5 +81,5 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':library_wj')
-    compile 'com.squareup.okhttp3:okhttp:3.6.0'
+   // compile 'com.squareup.okhttp3:okhttp:3.6.0'
 }
